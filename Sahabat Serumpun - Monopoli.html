@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Commons: Final Release</title>
+    <style>
+        /* --- VISUAL STYLE SYSTEM --- */
+        :root {
+            --bg-color: #0b0c15;
+            --panel-bg: rgba(20, 25, 35, 0.95);
+            --gold: #f1c40f;
+            --cyan: #00d2d3;
+            --font-main: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body { margin: 0; overflow: hidden; font-family: var(--font-main); background: var(--bg-color); color: #fff; }
+        
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .pointer-auto { pointer-events: auto !important; }
+
+        /* BUTTONS */
+        .btn {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            border: none; padding: 12px 24px; color: #000; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+            border-radius: 4px; transition: all 0.2s; border-bottom: 4px solid #d35400;
+        }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .btn:active { transform: translateY(1px); border-bottom: 1px solid #d35400; }
+        .btn-blue { background: linear-gradient(135deg, #0984e3, #74b9ff); color: #fff; border-bottom: 4px solid #0652dd; }
+        .btn-red { background: linear-gradient(135deg, #ff6b6b, #ee5253); color: #fff; border-bottom: 4px solid #b33939; }
+
+        /* SCREENS */
+        #screen-title, #screen-setup {
+            position: absolute; top:0; left:0; width:100%; height:100%; z-index: 100;
+            background: radial-gradient(circle at center, #2c3e50, #000000);
+            flex-direction: column; align-items: center; justify-content: center; pointer-events: auto;
+        }
+        
+        h1.mega-title { 
+            font-size: 5rem; margin: 0; color: var(--gold); 
+            text-shadow: 0 0 40px rgba(241, 196, 15, 0.6); letter-spacing: 10px; text-align: center;
+        }
+        
+        .setup-panel {
+            width: 700px; max-width:90%; background: #1e272e; padding: 40px;
+            border: 2px solid var(--gold); border-radius: 8px; max-height: 80vh; overflow-y: auto;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+        .form-row { margin-bottom: 20px; }
+        .player-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        /* HUD PANELS */
+        #ui-layer { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; z-index: 10; }
+        
+        .hud-panel {
+            position: absolute; background: var(--panel-bg); border: 1px solid #555;
+            padding: 15px; border-radius: 8px; backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); pointer-events: auto;
+        }
+
+        #hud-player { top: 20px; left: 20px; width: 280px; border-left: 4px solid var(--cyan); transition: border-color 0.3s; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--gold); font-family: monospace; }
+        
+        #hud-tile { top: 20px; right: 20px; width: 300px; text-align: right; border-right: 4px solid #2ed573; }
+        
+        #hud-log { 
+            bottom: 20px; left: 20px; width: 300px; height: 200px; 
+            overflow-y: auto; font-size: 0.8rem; color: #ccc; border-top: 2px solid var(--gold);
+        }
+        .log-line { margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 2px; }
+
+        #hud-action {
+            bottom: 150px; left: 50%; transform: translateX(-50%);
+            text-align: center; min-width: 400px; border: 2px solid var(--gold); z-index: 50;
+        }
+
+        #hud-dice { bottom: 30px; right: 30px; text-align: center; z-index: 50; }
+        .dice-box { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 0 10px #fff; }
+
+        /* MODAL */
+        #modal-overlay {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.8); z-index: 190; display: flex;
+            align-items: center; justify-content: center; pointer-events: auto;
+        }
+        #modal-card {
+            width: 450px; padding: 40px; background: #fff; color: #111;
+            text-align: center; border-radius: 8px; box-shadow: 0 0 50px #000; border: 8px solid #333;
+        }
+        .type-chance { border-color: #e67e22 !important; }
+        .type-fund { border-color: #0984e3 !important; }
+
+        #controls-hint {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            color: #666; font-size: 0.8rem; pointer-events: none; opacity: 0.7;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <div id="screen-title" class="flex">
+        <h1 class="mega-title">HERITAGE<br>COMMONS</h1>
+        <div style="font-size: 1.5rem; color: #aaa; margin-top: 10px; letter-spacing: 3px; text-transform:uppercase;">Safeguarding in a Shared World</div>
+        <button class="btn" style="margin-top: 50px; font-size: 1.2rem;" onclick="app.goToSetup()">START DIPLOMACY</button>
+        <div style="margin-top:50px; color:#666; font-size:0.9rem;">DESIGN & CODE BY <strong>ANGGA CONNI SAPUTRA 2024</strong></div>
+    </div>
+
+    <div id="screen-setup" class="hidden flex">
+        <div class="setup-panel">
+            <h2 style="color:var(--gold); text-align:center; margin-bottom:30px;">SESSION CONFIGURATION</h2>
+            <div class="form-row">
+                <label style="color:#fff;">DELEGATION SIZE: <span id="setup-count-display" style="color:var(--gold); font-weight:bold;">2</span></label>
+                <input type="range" id="setup-count" min="2" max="10" value="2" style="width:100%; margin-top:10px;" oninput="app.updateSetupUI()">
+            </div>
+            <div id="setup-grid" class="player-grid"></div>
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn" onclick="app.startGame()">ENTER MUSEUM</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ui-layer" class="hidden">
+        <div id="hud-player" class="hud-panel">
+            <div style="font-size:1.2rem; font-weight:bold; color:#fff;" id="disp-pname">Player 1</div>
+            <div style="font-size:0.75rem; color:#aaa;">ROLE</div>
+            <div style="color:#ccc; margin-bottom:10px;" id="disp-prole">Community Bearer</div>
+            <div style="font-size:0.75rem; color:#aaa;">CULTURAL TRUST POINTS (CTP)</div>
+            <div class="stat-value" id="disp-ctp">2000</div>
+        </div>
+        <div id="hud-log" class="hud-panel">
+            <div class="log-line" style="color:var(--gold)">> Welcome to Heritage Commons.</div>
+        </div>
+        <div id="hud-tile" class="hud-panel">
+            <div style="font-size:0.7rem; color:#888;">TILE INSPECTOR</div>
+            <div style="font-size: 0.8rem; font-weight: bold; background:#444; padding:2px 6px; border-radius:4px; display:inline-block;" id="disp-ttype">START</div>
+            <div style="font-size: 1.5rem; font-weight:bold; color:#fff;" id="disp-tname">Transmission</div>
+            <div style="font-size: 0.9rem; color:#ccc; font-style:italic;" id="disp-tdesc">...</div>
+            <div style="margin-top:10px; font-size:0.8rem; color:var(--gold);" id="disp-towner">Public Domain</div>
+        </div>
+        <div id="hud-action" class="hud-panel hidden">
+            <div style="font-size: 1.2rem; font-weight:bold; margin-bottom:10px; color:#fff;" id="act-msg">Action</div>
+            <div id="act-btns"></div>
+        </div>
+        <div id="hud-dice" class="hud-panel">
+            <div class="dice-box" id="disp-dice">🎲</div>
+            <button class="btn" onclick="game.rollDice()">ROLL DICE</button>
+        </div>
+        <div id="modal-overlay" class="hidden">
+            <div id="modal-card">
+                <span style="font-size:4rem; display:block;" id="card-icon">📜</span>
+                <div style="font-size:1.8rem; font-weight:900; margin-bottom:10px;" id="card-title">TITLE</div>
+                <div style="font-size:1.1rem; margin-bottom:30px;" id="card-text">Text</div>
+                <button class="btn" onclick="game.closeCard()">ACKNOWLEDGE</button>
+            </div>
+        </div>
+        <div id="controls-hint">Left Click: Rotate | Right Click: Pan | Scroll: Zoom | Hover: Inspect Tile</div>
+    </div>
+
+    <script>
+        /** * HERITAGE COMMONS FINAL (Glitch Free)
+         * Author: Angga Conni Saputra
+         */
+
+        const ROLES = ["Community Bearer", "Gov. Officer", "Academic", "Youth Activist", "Diaspora", "Curator", "Master", "Diplomat"];
+        const COLORS = [0x00ffff, 0xff0055, 0xffff00, 0x00ff00, 0x9b59b6, 0xe67e22, 0xffffff, 0x34495e];
+
+        const TILE_DATA = [
+            // SISI 1 (0-14)
+            {n:"START", t:"start", c:0, d:"Transmission"}, {n:"Pantun", t:"shared", c:60, d:"Shared Poetry"}, {n:"Fund", t:"fund", c:0, d:"Memory Fund"},
+            {n:"Gurindam", t:"ich", c:60, d:"Advice Poetry"}, {n:"Didong", t:"ich", c:80, d:"Gayo Art"}, {n:"Terminal", t:"utility", c:200, d:"Travel Hub"},
+            {n:"Makyong", t:"shared", c:100, d:"Malay Theatre"}, {n:"Chance", t:"chance", c:0, d:"Encounter"}, {n:"Wayang K", t:"ich", c:100, d:"Shadow Puppet"},
+            {n:"Wayang G", t:"ich", c:120, d:"Wood Puppet"}, {n:"Panji", t:"shared", c:120, d:"Hero Tales"}, {n:"Gamelan", t:"ich", c:140, d:"Orchestra"},
+            {n:"Angklung", t:"ich", c:140, d:"Bamboo Music"}, {n:"Kolintang", t:"ich", c:160, d:"Wood Music"}, {n:"FREEZE", t:"corner", c:0, d:"Diplomatic Freeze"},
+            // SISI 2 (15-29)
+            {n:"Jamu", t:"ich", c:180, d:"Herbal Med"}, {n:"Fund", t:"fund", c:0, d:"Memory Fund"}, {n:"Subak", t:"ich", c:180, d:"Water System"},
+            {n:"Lumbung", t:"ich", c:200, d:"Rice Barn"}, {n:"Archive", t:"utility", c:200, d:"Digital Hub"}, {n:"Phinisi", t:"ich", c:220, d:"Shipbuilding"},
+            {n:"Chance", t:"chance", c:0, d:"Encounter"}, {n:"Noken", t:"ich", c:220, d:"Papua Bag"}, {n:"Sekaten", t:"ich", c:240, d:"Ceremony"},
+            {n:"Silat", t:"shared", c:240, d:"Martial Art"}, {n:"Rendang", t:"ich", c:260, d:"Spicy Meat"}, {n:"Tempe", t:"ich", c:260, d:"Soy Cake"},
+            {n:"Lumpia", t:"ich", c:280, d:"Spring Roll"}, {n:"Soto", t:"ich", c:280, d:"Soup"}, {n:"UNESCO HQ", t:"corner", c:0, d:"Neutral Ground"},
+            // SISI 3 (30-44)
+            {n:"Keris", t:"shared", c:300, d:"Dagger"}, {n:"Batik Tulis", t:"ich", c:300, d:"Wax Art"}, {n:"Fund", t:"fund", c:0, d:"Memory Fund"},
+            {n:"Batik Cap", t:"ich", c:320, d:"Stamped Art"}, {n:"Museum", t:"utility", c:200, d:"Exhibition"}, {n:"Songket", t:"shared", c:350, d:"Gold Weave"},
+            {n:"Chance", t:"chance", c:0, d:"Encounter"}, {n:"Tax", t:"tax", c:100, d:"Tokenism"}, {n:"Ikat", t:"ich", c:350, d:"Woven Art"},
+            {n:"Ulos", t:"ich", c:350, d:"Batak Cloth"}, {n:"Gerabah", t:"ich", c:380, d:"Pottery"}, {n:"Asmat", t:"ich", c:380, d:"Carving"},
+            {n:"Silver", t:"ich", c:400, d:"Silverwork"}, {n:"Rotan", t:"ich", c:400, d:"Rattan"}, {n:"BREACH", t:"corner", c:0, d:"Go to Freeze"},
+            // SISI 4 (45-59)
+            {n:"Saman", t:"ich", c:420, d:"Aceh Dance"}, {n:"Fund", t:"fund", c:0, d:"Memory Fund"}, {n:"Kecak", t:"ich", c:420, d:"Bali Dance"},
+            {n:"Reog", t:"ich", c:450, d:"Mask Dance"}, {n:"Capacity", t:"utility", c:200, d:"Training"}, {n:"Legong", t:"ich", c:450, d:"Court Dance"},
+            {n:"Chance", t:"chance", c:0, d:"Encounter"}, {n:"Ondel", t:"ich", c:480, d:"Giant Puppet"}, {n:"Barong", t:"ich", c:500, d:"Lion Dance"},
+            {n:"Tax", t:"tax", c:200, d:"Exploitation"}, {n:"Piring", t:"ich", c:520, d:"Plate Dance"}, {n:"Randai", t:"ich", c:520, d:"Folk Theatre"},
+            {n:"Sasando", t:"ich", c:550, d:"Harp"}, {n:"Tifa", t:"ich", c:550, d:"Drum"}, {n:"NUSANTARA", t:"shared", c:600, d:"Archipelago"}
+        ];
+
+        const CARDS = {
+            chance: [{t:"Viral!", d:"Youth interest spikes. +150 CTP.", v:150}, {t:"Misstep", d:"Bad policy. -50 CTP.", v:-50}],
+            fund: [{t:"Grant", d:"Funds approved. +200 CTP.", v:200}, {t:"Repair", d:"Site maintenance. -100 CTP.", v:-100}]
+        };
+
+        const app = {
+            players: [],
+            goToSetup: () => {
+                document.getElementById('screen-title').classList.add('hidden');
+                document.getElementById('screen-setup').classList.remove('hidden');
+                document.getElementById('screen-setup').style.display = 'flex';
+                app.updateSetupUI();
+            },
+            updateSetupUI: () => {
+                const count = parseInt(document.getElementById('setup-count').value);
+                document.getElementById('setup-count-display').innerText = count;
+                const grid = document.getElementById('setup-grid');
+                grid.innerHTML = '';
+                for(let i=0; i<count; i++) {
+                    const col = '#' + COLORS[i].toString(16).padStart(6,'0');
+                    grid.innerHTML += `<div style="background:#111; padding:10px; border-left:4px solid ${col}; border-radius:4px;">
+                        <div style="color:${col}; font-weight:bold; margin-bottom:5px;">DELEGATION ${i+1}</div>
+                        <input type="text" id="p-name-${i}" value="Player ${i+1}" style="width:90%; background:#222; color:#fff; border:1px solid #444; margin-bottom:5px;">
+                        <select id="p-role-${i}" style="width:95%; background:#222; color:#fff;">${ROLES.map((r,ix)=>`<option value="${ix}">${r}</option>`).join('')}</select>
+                    </div>`;
+                }
+            },
+            startGame: () => {
+                const count = parseInt(document.getElementById('setup-count').value);
+                app.players = [];
+                for(let i=0; i<count; i++) {
+                    app.players.push({
+                        id: i,
+                        name: document.getElementById(`p-name-${i}`).value,
+                        role: ROLES[parseInt(document.getElementById(`p-role-${i}`).value)],
+                        color: COLORS[i],
+                        ctp: 2000, pos: 0, frozen: 0, mesh: null
+                    });
+                }
+                document.getElementById('screen-setup').classList.add('hidden');
+                document.getElementById('ui-layer').classList.remove('hidden');
+                game.init3D();
+            }
+        };
+
+        const game = {
+            scene: null, camera: null, renderer: null, controls: null,
+            tiles: [], interactables: [], currentIdx: 0, isMoving: false,
+            raycaster: new THREE.Raycaster(), mouse: new THREE.Vector2(), highlighted: null,
+
+            init3D: () => {
+                game.scene = new THREE.Scene();
+                game.scene.background = new THREE.Color(0x101015); 
+                game.scene.fog = new THREE.FogExp2(0x101015, 0.008);
+
+                game.camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 1, 1000);
+                game.camera.position.set(0, 85, 85); game.camera.lookAt(0,0,0);
+
+                game.renderer = new THREE.WebGLRenderer({ antialias: true });
+                game.renderer.setSize(window.innerWidth, window.innerHeight);
+                game.renderer.shadowMap.enabled = true;
+                game.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                document.body.appendChild(game.renderer.domElement);
+
+                game.controls = new THREE.OrbitControls(game.camera, game.renderer.domElement);
+                game.controls.enableDamping = true; game.controls.dampingFactor=0.05; game.controls.maxPolarAngle=Math.PI/2.1;
+
+                const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8); game.scene.add(hemi);
+                const dir = new THREE.DirectionalLight(0xffeeb1, 1); dir.position.set(50,100,50); dir.castShadow=true; 
+                dir.shadow.mapSize.width=2048; dir.shadow.mapSize.height=2048; game.scene.add(dir);
+
+                const grid = new THREE.GridHelper(200, 50, 0x333333, 0x111111); game.scene.add(grid);
+                const partGeo = new THREE.BufferGeometry();
+                const partCount = 500; const posArr = new Float32Array(partCount*3);
+                for(let i=0; i<partCount*3; i++) posArr[i] = (Math.random()-0.5)*150;
+                partGeo.setAttribute('position', new THREE.BufferAttribute(posArr, 3));
+                const partMat = new THREE.PointsMaterial({size:0.2, color:0x00d2d3, transparent:true, opacity:0.6});
+                game.scene.add(new THREE.Points(partGeo, partMat));
+
+                game.createBoard();
+                game.createDecor();
+                game.spawnPlayers();
+                game.updateHUD();
+
+                window.addEventListener('resize', ()=> { game.camera.aspect=window.innerWidth/window.innerHeight; game.camera.updateProjectionMatrix(); game.renderer.setSize(window.innerWidth,window.innerHeight); });
+                window.addEventListener('mousemove', (e)=> { game.mouse.x=(e.clientX/window.innerWidth)*2-1; game.mouse.y=-(e.clientY/window.innerHeight)*2+1; });
+                game.animate();
+            },
+
+            createLabelTexture: (text, colorHex, symbol=null) => {
+                const cvs = document.createElement('canvas'); cvs.width=256; cvs.height=256;
+                const ctx = cvs.getContext('2d');
+                ctx.fillStyle = colorHex; ctx.fillRect(0,0,256,256);
+                ctx.lineWidth = 10; ctx.strokeStyle = "rgba(0,0,0,0.3)"; ctx.strokeRect(5,5,246,246);
+                if(symbol) { ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.font = "bold 180px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle"; ctx.fillText(symbol, 128, 128); }
+                ctx.fillStyle = "#fff"; ctx.font = "bold 40px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
+                const words = text.split(" ");
+                if(words.length > 1) { ctx.fillText(words[0], 128, 100); ctx.fillText(words[1], 128, 150); } else { ctx.fillText(text, 128, 128); }
+                return new THREE.CanvasTexture(cvs);
+            },
+
+            createBoard: () => {
+                const total = 60; 
+                const size = 3; 
+                const offset = (15 * size) / 2; // FIXED OFFSET CALCULATION (22.5)
+
+                for(let i=0; i<total; i++) {
+                    let x=0, z=0;
+                    let rotation = 0;
+
+                    if(i < 15) { // Bottom (0-14)
+                        x = offset - (i * size); z = offset; 
+                        rotation = 0;
+                    }
+                    else if(i < 30) { // Left (15-29)
+                        x = -offset; z = offset - ((i-15) * size); 
+                        rotation = -Math.PI/2;
+                    }
+                    else if(i < 45) { // Top (30-44)
+                        x = -offset + ((i-30) * size); z = -offset; 
+                        rotation = -Math.PI;
+                    }
+                    else { // Right (45-59)
+                        x = offset; z = -offset + ((i-45) * size); 
+                        rotation = Math.PI/2;
+                    }
+
+                    const d = TILE_DATA[i];
+                    d.owner=-1; d.sharedOwners=[];
+
+                    let colStr = "#555555"; let symbol = null;
+                    if(d.t==='ich') colStr = "#8B4513";
+                    if(d.t==='shared') colStr = "#27ae60";
+                    if(d.t==='chance') { colStr = "#e67e22"; symbol="?"; }
+                    if(d.t==='fund') { colStr = "#2980b9"; symbol="$"; }
+                    if(d.t==='start') colStr = "#f1c40f";
+                    if(d.t==='corner') colStr = "#7f8c8d";
+                    if(d.t==='tax') { colStr = "#c0392b"; symbol="!"; }
+
+                    const tex = game.createLabelTexture(d.n, colStr, symbol);
+                    const mat = new THREE.MeshLambertMaterial({ map: tex });
+                    const mesh = new THREE.Mesh(new THREE.BoxGeometry(size*0.95, 0.5, size*0.95), mat);
+                    mesh.position.set(x, 0, z); 
+                    mesh.rotation.y = rotation;
+                    mesh.receiveShadow=true;
+
+                    game.scene.add(mesh);
+                    mesh.userData = { id:i, data:d };
+                    game.tiles.push({mesh, x, z, data:d});
+                    game.interactables.push(mesh);
+                }
+                const plane = new THREE.Mesh(new THREE.PlaneGeometry(60,60), new THREE.MeshStandardMaterial({color:0x050505}));
+                plane.rotation.x=-Math.PI/2; plane.position.y=-0.51; game.scene.add(plane);
+            },
+
+            createDecor: () => {
+                const cvs = document.createElement('canvas'); cvs.width=1024; cvs.height=256;
+                const ctx = cvs.getContext('2d');
+                ctx.fillStyle = "#800000"; ctx.fillRect(0,0,1024,256);
+                ctx.strokeStyle="#f1c40f"; ctx.lineWidth=20; ctx.strokeRect(10,10,1004,236);
+                ctx.fillStyle="#fff"; ctx.font="bold 100px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
+                ctx.fillText("HERITAGE COMMONS", 512,128);
+                const logo = new THREE.Mesh(new THREE.PlaneGeometry(24,6), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cvs), transparent:true}));
+                logo.rotation.x=-Math.PI/2; logo.rotation.z=-Math.PI/4; logo.position.y=0.1; game.scene.add(logo);
+
+                const dGeo = new THREE.BoxGeometry(4,1,6);
+                const d1 = new THREE.Mesh(dGeo, new THREE.MeshLambertMaterial({color:0xe67e22})); d1.position.set(-10,0.5,-10); d1.rotation.y=-Math.PI/4; game.scene.add(d1);
+                const d2 = new THREE.Mesh(dGeo, new THREE.MeshLambertMaterial({color:0x0984e3})); d2.position.set(10,0.5,10); d2.rotation.y=-Math.PI/4; game.scene.add(d2);
+            },
+
+            spawnPlayers: () => {
+                app.players.forEach(p => {
+                    const g = new THREE.Group();
+                    const m = new THREE.MeshStandardMaterial({color:p.color});
+                    g.add(new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.2,16), new THREE.MeshBasicMaterial({color:0x222})));
+                    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.4,1.5,16), m); b.position.y=0.8; g.add(b);
+                    const h = new THREE.Mesh(new THREE.DodecahedronGeometry(0.4), m); h.position.y=1.8; g.add(h);
+                    game.scene.add(g); p.mesh=g;
+                });
+                game.updateOccupancy(0);
+            },
+
+            updateOccupancy: (tileIdx) => {
+                const playersHere = app.players.filter(p => p.pos === tileIdx);
+                const tile = game.tiles[tileIdx];
+                if(!tile) return;
+                if (playersHere.length === 1) {
+                    const p = playersHere[0];
+                    p.mesh.position.set(tile.x, 0.5, tile.z);
+                } else {
+                    const radius = 1.0; 
+                    playersHere.forEach((p, i) => {
+                        const angle = (i / playersHere.length) * Math.PI * 2;
+                        p.mesh.position.set(tile.x + Math.cos(angle)*radius, 0.5, tile.z + Math.sin(angle)*radius);
+                    });
+                }
+            },
+
+            checkHover: () => {
+                game.raycaster.setFromCamera(game.mouse, game.camera);
+                const intersects = game.raycaster.intersectObjects(game.interactables);
+                if(intersects.length > 0) {
+                    const obj = intersects[0].object;
+                    if(game.highlighted !== obj) {
+                        if(game.highlighted) game.highlighted.material.emissive.setHex(0x000000);
+                        game.highlighted = obj;
+                        game.highlighted.material.emissive.setHex(0x444444);
+                        const d = obj.userData.data;
+                        document.getElementById('disp-ttype').innerText = d.t.toUpperCase();
+                        document.getElementById('disp-tname').innerText = d.n;
+                        document.getElementById('disp-tdesc').innerText = d.d;
+                        document.getElementById('disp-towner').innerText = (d.owner>-1)?app.players[d.owner].name : "Public Domain";
+                    }
+                } else {
+                    if(game.highlighted) { game.highlighted.material.emissive.setHex(0x000000); game.highlighted=null; }
+                }
+            },
+
+            rollDice: () => {
+                if(game.isMoving) return;
+                document.getElementById('hud-action').classList.add('hidden');
+                const p = app.players[game.currentIdx];
+                if(p.frozen>0) { p.frozen--; game.log(`${p.name} is Frozen. ${p.frozen} turns.`); game.nextTurn(); return; }
+                const r = Math.ceil(Math.random()*6);
+                document.getElementById('disp-dice').innerText = `🎲 ${r}`;
+                game.log(`${p.name} rolls ${r}.`);
+                game.move(p, r);
+            },
+
+            move: (p, steps) => {
+                game.isMoving = true; let left=steps;
+                const oldPos = p.pos;
+                const iv = setInterval(()=>{
+                    p.pos=(p.pos+1)%60; 
+                    const t=game.tiles[p.pos];
+                    p.mesh.position.set(t.x, 1.5, t.z); 
+                    if(p.pos===0) { p.ctp+=200; game.log("Passed Start. +200 CTP."); game.updateHUD(); }
+                    left--;
+                    if(left<=0) { 
+                        clearInterval(iv); 
+                        game.isMoving=false; 
+                        game.updateOccupancy(oldPos);
+                        game.updateOccupancy(p.pos);
+                        game.handle(p); 
+                    }
+                }, 150);
+            },
+
+            handle: (p) => {
+                const d = game.tiles[p.pos].data;
+                document.getElementById('disp-tname').innerText = d.n;
+                if(d.t==='chance'||d.t==='fund') { game.card(d.t); return; }
+                if(d.t==='corner') { 
+                    if(d.n==="BREACH" && p.pos!==14) { 
+                        game.log("To Freeze!"); 
+                        const oldP = p.pos; p.pos=14; p.frozen=2; 
+                        game.updateOccupancy(oldP); game.updateOccupancy(14); 
+                    } 
+                    game.nextTurn(); return; 
+                }
+                if(d.t==='tax') { p.ctp-=d.c; game.log(`Paid Tax ${d.c}`); game.updateHUD(); game.nextTurn(); return; }
+                if(d.t==='ich'||d.t==='shared') game.action(p, d);
+                else game.nextTurn();
+            },
+
+            action: (p, d) => {
+                const ui=document.getElementById('hud-action'); const msg=document.getElementById('act-msg'); const btns=document.getElementById('act-btns');
+                ui.classList.remove('hidden');
+                if(d.owner===-1 && d.sharedOwners.length===0) {
+                    msg.innerText = "Unmanaged Heritage.";
+                    btns.innerHTML = `<button class="btn btn-blue" onclick="game.doSafeguard(${d.c})">SAFEGUARD (${d.c})</button> <button class="btn btn-red" onclick="game.nextTurn()">IGNORE</button>`;
+                } else if(d.owner===p.id || d.sharedOwners.includes(p.id)) {
+                    msg.innerText = "You manage this."; btns.innerHTML=`<button class="btn btn-blue" onclick="game.nextTurn()">CONTINUE</button>`;
+                } else {
+                    if(d.t==='shared') {
+                        msg.innerText = "Shared Heritage.";
+                        btns.innerHTML = `<button class="btn btn-blue" onclick="game.doJoin(${d.c})">JOINT (${d.c})</button> <button class="btn btn-red" onclick="game.doRent(${Math.floor(d.c*0.2)}, ${d.owner})">RECOGNIZE (${Math.floor(d.c*0.2)})</button>`;
+                    } else {
+                        const c = Math.floor(d.c*0.2);
+                        msg.innerText = "Managed by other."; btns.innerHTML=`<button class="btn btn-red" onclick="game.doRent(${c}, ${d.owner})">PAY ${c}</button>`;
+                    }
+                }
+            },
+
+            doSafeguard: (c) => {
+                const p=app.players[game.currentIdx];
+                if(p.ctp>=c) { p.ctp-=c; const d=game.tiles[p.pos].data; if(d.t==='shared') d.sharedOwners.push(p.id); else d.owner=p.id; game.log(`${p.name} safeguards ${d.n}`); const m=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,0.1,32), new THREE.MeshBasicMaterial({color:p.color})); m.position.copy(game.tiles[p.pos].mesh.position); m.position.y=0.06; game.scene.add(m); game.updateHUD(); game.nextTurn(); } else alert("No CTP");
+            },
+
+            doJoin: (c) => { const p=app.players[game.currentIdx]; if(p.ctp>=c) { p.ctp-=c; game.tiles[p.pos].data.sharedOwners.push(p.id); game.log("Joined stewardship."); game.updateHUD(); game.nextTurn(); } else alert("No CTP"); },
+            doRent: (c, oid) => { const p=app.players[game.currentIdx]; p.ctp-=c; if(oid!==-1) app.players[oid].ctp+=c; game.log(`Paid ${c} CTP.`); game.updateHUD(); game.nextTurn(); },
+            
+            card: (type) => {
+                const c = CARDS[type][Math.floor(Math.random()*CARDS[type].length)];
+                const m = document.getElementById('modal-overlay'); m.classList.remove('hidden');
+                document.getElementById('card-title').innerText=c.t; document.getElementById('card-text').innerText=c.d;
+                document.getElementById('modal-card').className = (type==='chance')?'type-chance':'type-fund';
+                const p=app.players[game.currentIdx]; if(c.v) p.ctp+=c.v; game.updateHUD();
+            },
+            closeCard: () => { document.getElementById('modal-overlay').classList.add('hidden'); game.nextTurn(); },
+
+            nextTurn: () => { 
+                document.getElementById('hud-action').classList.add('hidden'); 
+                game.currentIdx=(game.currentIdx+1)%app.players.length; 
+                game.updateHUD(); 
+            },
+            
+            updateHUD: () => { 
+                const p=app.players[game.currentIdx]; 
+                document.getElementById('disp-pname').innerText=p.name; 
+                document.getElementById('hud-player').style.borderLeftColor='#'+p.color.toString(16).padStart(6,'0'); 
+                document.getElementById('disp-prole').innerText=p.role; 
+                document.getElementById('disp-ctp').innerText=p.ctp; 
+            },
+            
+            log: (msg) => { const b=document.getElementById('hud-log'); b.innerHTML+=`<div class="log-line">${msg}</div>`; b.scrollTop=b.scrollHeight; },
+            
+            animate: () => { 
+                requestAnimationFrame(game.animate); 
+                game.controls.update(); 
+                game.checkHover(); 
+                
+                const time = Date.now() * 0.005;
+                app.players.forEach((p, i) => {
+                    if (p.mesh) {
+                        if (i === game.currentIdx && !game.isMoving) {
+                            const scale = 1 + Math.sin(time * 3) * 0.15; 
+                            p.mesh.scale.set(scale, scale, scale);
+                            p.mesh.position.y = 0.5 + Math.sin(time * 3) * 0.2;
+                        } else if (!game.isMoving) {
+                            p.mesh.scale.set(1, 1, 1);
+                            p.mesh.position.y = 0.5;
+                        }
+                    }
+                });
+                game.renderer.render(game.scene, game.camera); 
+            }
+        };
+    </script>
+</body>
+</html>

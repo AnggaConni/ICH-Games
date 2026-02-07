@@ -1,7 +1,5 @@
 ICH Games
 
-# [Nama Project/Aplikasi]
-
 > **Open Source Tools for Community & Governance Reform**
 > *Built by Angga Conni Saputra*
 

@@ -470,7 +470,13 @@
                     p.pos=(p.pos+1)%60; 
                     const t=game.tiles[p.pos];
                     p.mesh.position.set(t.x, 1.5, t.z); 
-                    if(p.pos===0) { p.ctp+=200; game.log("Passed Start. +200 CTP."); game.updateHUD(); }
+                    if(p.pos===0) { 
+                        // SKILL: Gov. Officer dapat dana ekstra saat lewat Start
+                        const startBonus = (p.role === "Gov. Officer") ? 400 : 200;
+                        p.ctp += startBonus; 
+                        game.log(`Passed Start. +${startBonus} CTP.`); 
+                        game.updateHUD(); 
+                    }
                     left--;
                     if(left<=0) { 
                         clearInterval(iv); 
@@ -488,13 +494,26 @@
                 if(d.t==='chance'||d.t==='fund') { game.card(d.t); return; }
                 if(d.t==='corner') { 
                     if(d.n==="BREACH" && p.pos!==14) { 
-                        game.log("To Freeze!"); 
-                        const oldP = p.pos; p.pos=14; p.frozen=2; 
-                        game.updateOccupancy(oldP); game.updateOccupancy(14); 
+                        // SKILL: Diplomat punya kekebalan dari Freeze
+                        if (p.role === "Diplomat") {
+                            game.log(`🛡️ ${p.name} uses Diplomatic Immunity!`);
+                        } else {
+                            game.log("To Freeze!"); 
+                            const oldP = p.pos; p.pos=14; p.frozen=2; 
+                            game.updateOccupancy(oldP); game.updateOccupancy(14); 
+                        }
                     } 
                     game.nextTurn(); return; 
                 }
-                if(d.t==='tax') { p.ctp-=d.c; game.log(`Paid Tax ${d.c}`); game.updateHUD(); game.nextTurn(); return; }
+                if(d.t==='tax') { 
+                    // SKILL: Academic bebas Tax (pajak)
+                    if (p.role === "Academic") {
+                        game.log(`🎓 ${p.name} (Academic) is tax-exempt!`);
+                    } else {
+                        p.ctp-=d.c; game.log(`Paid Tax ${d.c}`); 
+                    }
+                    game.updateHUD(); game.nextTurn(); return; 
+                }
                 if(d.t==='ich'||d.t==='shared') game.action(p, d);
                 else game.nextTurn();
             },
@@ -502,43 +521,128 @@
             action: (p, d) => {
                 const ui=document.getElementById('hud-action'); const msg=document.getElementById('act-msg'); const btns=document.getElementById('act-btns');
                 ui.classList.remove('hidden');
+                
+                // SKILL: Community Bearer dapat diskon 25% untuk Safeguard
+                let safeCost = d.c;
+                if (p.role === "Community Bearer") safeCost = Math.floor(d.c * 0.75);
+
                 if(d.owner===-1 && d.sharedOwners.length===0) {
                     msg.innerText = "Unmanaged Heritage.";
-                    btns.innerHTML = `<button class="btn btn-blue" onclick="game.doSafeguard(${d.c})">SAFEGUARD (${d.c})</button> <button class="btn btn-red" onclick="game.nextTurn()">IGNORE</button>`;
+                    btns.innerHTML = `<button class="btn btn-blue" onclick="game.doSafeguard(${safeCost})">SAFEGUARD (${safeCost})</button> <button class="btn btn-red" onclick="game.nextTurn()">IGNORE</button>`;
                 } else if(d.owner===p.id || d.sharedOwners.includes(p.id)) {
                     msg.innerText = "You manage this."; btns.innerHTML=`<button class="btn btn-blue" onclick="game.nextTurn()">CONTINUE</button>`;
                 } else {
+                    let exCost = Math.floor(d.c*0.2); // Biaya belajar dari pemilik lain
                     if(d.t==='shared') {
                         msg.innerText = "Shared Heritage.";
-                        btns.innerHTML = `<button class="btn btn-blue" onclick="game.doJoin(${d.c})">JOINT (${d.c})</button> <button class="btn btn-red" onclick="game.doRent(${Math.floor(d.c*0.2)}, ${d.owner})">RECOGNIZE (${Math.floor(d.c*0.2)})</button>`;
+                        btns.innerHTML = `<button class="btn btn-blue" onclick="game.doJoin(${safeCost})">JOINT (${safeCost})</button> <button class="btn btn-red" onclick="game.doRent(${exCost}, ${d.owner})">LEARN (${exCost})</button>`;
                     } else {
-                        const c = Math.floor(d.c*0.2);
-                        msg.innerText = "Managed by other."; btns.innerHTML=`<button class="btn btn-red" onclick="game.doRent(${c}, ${d.owner})">PAY ${c}</button>`;
+                        msg.innerText = "Managed by other."; 
+                        btns.innerHTML=`<button class="btn btn-red" onclick="game.doRent(${exCost}, ${d.owner})">EXCHANGE KNOWLEDGE (${exCost})</button>`;
                     }
                 }
             },
 
             doSafeguard: (c) => {
                 const p=app.players[game.currentIdx];
-                if(p.ctp>=c) { p.ctp-=c; const d=game.tiles[p.pos].data; if(d.t==='shared') d.sharedOwners.push(p.id); else d.owner=p.id; game.log(`${p.name} safeguards ${d.n}`); const m=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,0.1,32), new THREE.MeshBasicMaterial({color:p.color})); m.position.copy(game.tiles[p.pos].mesh.position); m.position.y=0.06; game.scene.add(m); game.updateHUD(); game.nextTurn(); } else alert("No CTP");
+                if(p.ctp>=c) { 
+                    p.ctp-=c; const d=game.tiles[p.pos].data; 
+                    if(d.t==='shared') d.sharedOwners.push(p.id); else d.owner=p.id; 
+                    game.log(`${p.name} safeguards ${d.n}`); 
+                    const m=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,0.1,32), new THREE.MeshBasicMaterial({color:p.color})); 
+                    m.position.copy(game.tiles[p.pos].mesh.position); m.position.y=0.06; game.scene.add(m); 
+                    game.updateHUD(); 
+                    
+                    // PEMANGGILAN FUNGSI MENANG (Akan kita buat di Tahap 2)
+                    game.checkWinCondition(); 
+                } else alert("No CTP");
             },
 
-            doJoin: (c) => { const p=app.players[game.currentIdx]; if(p.ctp>=c) { p.ctp-=c; game.tiles[p.pos].data.sharedOwners.push(p.id); game.log("Joined stewardship."); game.updateHUD(); game.nextTurn(); } else alert("No CTP"); },
-            doRent: (c, oid) => { const p=app.players[game.currentIdx]; p.ctp-=c; if(oid!==-1) app.players[oid].ctp+=c; game.log(`Paid ${c} CTP.`); game.updateHUD(); game.nextTurn(); },
+            doJoin: (c) => { 
+                const p=app.players[game.currentIdx]; 
+                if(p.ctp>=c) { 
+                    p.ctp-=c; game.tiles[p.pos].data.sharedOwners.push(p.id); 
+                    game.log("Joined stewardship."); game.updateHUD(); 
+                    
+                    // PEMANGGILAN FUNGSI MENANG (Akan kita buat di Tahap 2)
+                    game.checkWinCondition(); 
+                } else alert("No CTP"); 
+            },
+
+            doRent: (c, oid) => { 
+                const p=app.players[game.currentIdx]; p.ctp-=c; 
+                // SKILL: Master dapat poin ganda saat ada yang belajar dari dia
+                let received = (oid !== -1 && app.players[oid].role === "Master") ? c * 2 : c;
+                if(oid!==-1) app.players[oid].ctp+=received; 
+                
+                game.log(`Knowledge Exchange: ${c} CTP.`); 
+                game.updateHUD(); game.nextTurn(); 
+            },
             
             card: (type) => {
                 const c = CARDS[type][Math.floor(Math.random()*CARDS[type].length)];
                 const m = document.getElementById('modal-overlay'); m.classList.remove('hidden');
                 document.getElementById('card-title').innerText=c.t; document.getElementById('card-text').innerText=c.d;
                 document.getElementById('modal-card').className = (type==='chance')?'type-chance':'type-fund';
-                const p=app.players[game.currentIdx]; if(c.v) p.ctp+=c.v; game.updateHUD();
+                const p=app.players[game.currentIdx]; 
+                
+                if(c.v) {
+                    // SKILL: Gov. Officer dapat Fund lebih besar
+                    let bonus = c.v;
+                    if(type === 'fund' && c.v > 0 && p.role === "Gov. Officer") bonus = Math.floor(c.v * 1.5);
+                    p.ctp+=bonus; 
+                }
+                game.updateHUD();
             },
-            closeCard: () => { document.getElementById('modal-overlay').classList.add('hidden'); game.nextTurn(); },
 
-            nextTurn: () => { 
+            // --- LOGIKA KEMENANGAN ---
+            checkWinCondition: () => {
+                // Filter semua tile yang berjenis warisan (ich & shared)
+                const allHeritage = game.tiles.filter(t => t.data.t === 'ich' || t.data.t === 'shared');
+                
+                // Cari apakah masih ada warisan yang owner-nya -1 (belum diklaim)
+                const unmanaged = allHeritage.filter(t => t.data.owner === -1 && t.data.sharedOwners.length === 0);
+                
+                // Jika sudah habis (0), panggil fungsi endGame
+                if (unmanaged.length === 0) {
+                    game.endGame();
+                } else {
+                    // Kalau masih ada, lanjut giliran
+                    game.nextTurn();
+                }
+            },
+
+            endGame: () => {
+                // Hitung skor kekayaan: CTP sisa + Harga ICH yang dimiliki
+                app.players.forEach(p => {
+                    p.totalScore = p.ctp;
+                    game.tiles.forEach(t => {
+                        if(t.data.owner === p.id) p.totalScore += t.data.c;
+                        if(t.data.sharedOwners.includes(p.id)) p.totalScore += Math.floor(t.data.c / t.data.sharedOwners.length);
+                    });
+                });
+                
+                // Urutkan dari tertinggi (index 0 jadi pemenang)
+                app.players.sort((a,b) => b.totalScore - a.totalScore);
+                const winner = app.players[0];
+
+                // Modifikasi UI Kartu Modal untuk jadi layar Kemenangan
+                const m = document.getElementById('modal-overlay');
+                m.classList.remove('hidden');
+                document.getElementById('card-icon').innerText = "🏆";
+                document.getElementById('card-title').innerText = "ALL HERITAGE SECURED!";
+                document.getElementById('card-text').innerHTML = `
+                    <div style="font-size:1.2rem; color:var(--gold); margin-bottom:15px;">Diplomacy Complete!</div>
+                    <b>Top Delegate: ${winner.name}</b><br>
+                    Role: ${winner.role}<br>
+                    Total Influence: ${winner.totalScore} CTP<br><br>
+                    <small>Refresh browser to start a new session.</small>
+                `;
+                document.getElementById('modal-card').style.borderColor = "var(--gold)";
+                
+                // Sembunyikan tombol "Acknowledge" agar game berhenti dan tidak bisa lanjut
+                document.querySelector('#modal-card .btn').style.display = 'none';
                 document.getElementById('hud-action').classList.add('hidden'); 
-                game.currentIdx=(game.currentIdx+1)%app.players.length; 
-                game.updateHUD(); 
             },
             
             updateHUD: () => { 

@@ -598,6 +598,25 @@
                 game.updateHUD();
             },
 
+            closeCard: () => {
+                // Sembunyikan modal
+                document.getElementById('modal-overlay').classList.add('hidden');
+                // Lanjut ke giliran berikutnya
+                game.nextTurn();
+            },
+
+            nextTurn: () => {
+                // Pindah index ke player selanjutnya
+                game.currentIdx = (game.currentIdx + 1) % app.players.length;
+                
+                // Pastikan panel aksi tertutup dan update UI
+                document.getElementById('hud-action').classList.add('hidden');
+                game.updateHUD();
+                
+                // Beri notifikasi di log
+                game.log(`🎲 Giliran ${app.players[game.currentIdx].name}.`);
+            },
+
             // --- LOGIKA KEMENANGAN ---
             checkWinCondition: () => {
                 // Filter semua tile yang berjenis warisan (ich & shared)
@@ -682,4 +701,3 @@
     </script>
 </body>
 </html>
-

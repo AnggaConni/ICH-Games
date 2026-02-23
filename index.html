@@ -125,7 +125,7 @@
     </div>
 
     <div id="ui-layer" class="hidden">
-        <audio id="bgm-player" loop>
+        <audio id="bgm-player" loop preload="auto">
         <source src="bgmusic.mp3" type="audio/mpeg">
     </audio>
 
@@ -232,6 +232,16 @@
             },
 
             goToSetup: () => {
+                // Mainkan musik saat masuk ke menu setup
+                const audio = document.getElementById("bgm-player");
+                const btn = document.getElementById("btn-bgm");
+                
+                audio.volume = document.getElementById("bgm-vol").value;
+                audio.play().then(() => {
+                    btn.innerHTML = "⏸️ PAUSE MUSIC";
+                    btn.classList.add("btn-blue");
+                }).catch(err => console.log("Gagal Autoplay:", err));
+
                 document.getElementById('screen-title').classList.add('hidden');
                 document.getElementById('screen-setup').classList.remove('hidden');
                 document.getElementById('screen-setup').style.display = 'flex';

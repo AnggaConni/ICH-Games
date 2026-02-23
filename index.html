@@ -398,7 +398,7 @@
                 ctx.fillStyle = "#800000"; ctx.fillRect(0,0,1024,256);
                 ctx.strokeStyle="#f1c40f"; ctx.lineWidth=20; ctx.strokeRect(10,10,1004,236);
                 ctx.fillStyle="#fff"; ctx.font="bold 100px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
-                ctx.fillText("HERITAGE COMMONS", 512,128);
+                ctx.fillText("Shared Heritage", 512,128);
                 const logo = new THREE.Mesh(new THREE.PlaneGeometry(24,6), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cvs), transparent:true}));
                 logo.rotation.x=-Math.PI/2; logo.rotation.z=-Math.PI/4; logo.position.y=0.1; game.scene.add(logo);
 
@@ -682,3 +682,4 @@
     </script>
 </body>
 </html>
+

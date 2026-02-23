@@ -86,6 +86,7 @@
             background: rgba(0,0,0,0.8); z-index: 190; display: flex;
             align-items: center; justify-content: center; pointer-events: auto;
         }
+        
         #modal-card {
             width: 450px; padding: 40px; background: #fff; color: #111;
             text-align: center; border-radius: 8px; box-shadow: 0 0 50px #000; border: 8px solid #333;
@@ -170,7 +171,59 @@
                 <button class="btn" onclick="game.closeCard()">ACKNOWLEDGE</button>
             </div>
         </div>
-        <div id="controls-hint">Left Click: Rotate | Right Click: Pan | Scroll: Zoom | Hover: Inspect Tile</div>
+
+        <div id="modal-exchange" class="hidden" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0, 40, 40, 0.85); z-index: 195; display: flex; align-items: center; justify-content: center; pointer-events: auto;">
+            <div style="width: 600px; padding: 40px; background: #0b1319; color: #fff; text-align: center; border-radius: 8px; box-shadow: 0 0 50px rgba(0, 210, 211, 0.4); border: 2px solid var(--cyan);">
+                <div style="font-size: 0.9rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 10px;">KNOWLEDGE EXCHANGE INITIATED</div>
+                <div style="font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: var(--gold);" id="exchange-title">TITLE</div>
+                <div style="font-size: 1rem; margin-bottom: 20px; color: #ccc; font-style: italic;" id="exchange-desc">Description</div>
+                
+                <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #e74c3c;">
+                    <div style="font-size: 0.8rem; color: #aaa;">STANDARD COST</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;" id="exchange-cost">-0 CTP</div>
+                    <div style="font-size: 0.8rem; color: var(--cyan); margin-top: 5px; font-weight: bold;">Answer correctly to get a 50% discount!</div>
+                </div>
+
+                <div style="text-align: left; background: #1a252c; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; line-height: 1.4;" id="exchange-q">Question?</div>
+                    <div id="exchange-opts" style="display: flex; flex-direction: column; gap: 10px;">
+                        </div>
+                </div>
+                
+                <div id="exchange-result" class="hidden" style="margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; padding: 10px; border-radius: 4px;"></div>
+                
+                <button id="btn-exchange-continue" class="btn btn-blue hidden" onclick="game.closeExchange()" style="width: 100%;">ACKNOWLEDGE & END TURN</button>
+            </div>
+        </div>
+
+      <div id="controls-hint">Left Click: Rotate | Right Click: Pan | Scroll: Zoom | Hover: Inspect Tile</div>
+    </div> ```
+    
+    <div id="modal-exchange" class="hidden" style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0, 40, 40, 0.85); z-index: 195; display: flex; align-items: center; justify-content: center; pointer-events: auto;">
+            <div style="width: 600px; padding: 40px; background: #0b1319; color: #fff; text-align: center; border-radius: 8px; box-shadow: 0 0 50px rgba(0, 210, 211, 0.4); border: 2px solid var(--cyan);">
+                <div style="font-size: 0.9rem; color: var(--cyan); letter-spacing: 2px; margin-bottom: 10px;">KNOWLEDGE EXCHANGE INITIATED</div>
+                <div style="font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: var(--gold);" id="exchange-title">TITLE</div>
+                <div style="font-size: 1rem; margin-bottom: 20px; color: #ccc; font-style: italic;" id="exchange-desc">Description</div>
+                
+                <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 4px; margin-bottom: 20px; border-left: 4px solid #e74c3c;">
+                    <div style="font-size: 0.8rem; color: #aaa;">STANDARD COST</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;" id="exchange-cost">-0 CTP</div>
+                    <div style="font-size: 0.8rem; color: var(--cyan); margin-top: 5px; font-weight: bold;">Answer correctly to get a 50% discount!</div>
+                </div>
+
+                <div style="text-align: left; background: #1a252c; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <div style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold; line-height: 1.4;" id="exchange-q">Question?</div>
+                    <div id="exchange-opts" style="display: flex; flex-direction: column; gap: 10px;">
+                        </div>
+                </div>
+                
+                <div id="exchange-result" class="hidden" style="margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; padding: 10px; border-radius: 4px;"></div>
+                
+                <button id="btn-exchange-continue" class="btn btn-blue hidden" onclick="game.closeExchange()" style="width: 100%;">ACKNOWLEDGE & END TURN</button>
+            </div>
+        </div>
+
+      <div id="controls-hint">Left Click: Rotate | Right Click: Pan | Scroll: Zoom | Hover: Inspect Tile</div>
     </div>
 
     <script>
@@ -212,6 +265,290 @@
             chance: [{t:"Viral!", d:"Youth interest spikes. +150 CTP.", v:150}, {t:"Misstep", d:"Bad policy. -50 CTP.", v:-50}],
             fund: [{t:"Grant", d:"Funds approved. +200 CTP.", v:200}, {t:"Repair", d:"Site maintenance. -100 CTP.", v:-100}]
         };
+
+        // --- MODULAR KNOWLEDGE & QUIZ DATABASE ---
+        const KNOWLEDGE_DB = [
+            { 
+                t: "Oral Traditions", 
+                d: "Learning the techniques of passing down folklore directly from a Maestro.",
+                q: "What is considered a primary threat to the survival of oral traditions?",
+                opts: ["Climate change", "Language endangerment", "Overpopulation", "Digital archiving"],
+                ans: 1 // Index jawaban benar (dimulai dari 0)
+            },
+            { 
+                t: "Horizon Scanning", 
+                d: "Using this foresight planning tool to detect early signs of future developments.",
+                q: "What is the main purpose of Horizon Scanning in heritage safeguarding?",
+                opts: ["Drafting annual financial audits", "Identifying emerging threats and opportunities", "Calculating historical tax values", "Restoring physical museum artifacts"],
+                ans: 1
+            },
+            { 
+                t: "Impact Architect", 
+                d: "Applying this framework to design measurable social interventions.",
+                q: "In the context of behavioral change, what does an 'Impact Architect' primarily design?",
+                opts: ["Architectural blueprints for heritage sites", "Systemic social interventions and nudges", "Digital 3D models of artifacts", "Traditional music compositions"],
+                ans: 1
+            },
+            {
+                t: "Digital Archiving",
+                d: "Sharing techniques for recording traditional dance movements into 3D motion capture.",
+                q: "Why is 3D motion capture highly useful for safeguarding traditional dances?",
+                opts: ["It automatically translates the lyrics of the accompanying songs.", "It accurately preserves spatial movement data for future study.", "It replaces the need for human dancers in cultural festivals.", "It reduces the cost of tailoring traditional costumes."],
+                ans: 1
+            },
+            {
+                t: "Ecological Philosophy",
+                d: "Understanding the spiritual connection between indigenous communities and nature.",
+                q: "Which concept best describes traditional ecological knowledge?",
+                opts: ["Exploiting natural resources for maximum profit.", "A reciprocal, sustainable relationship with the environment.", "Ignoring seasonal changes in agricultural planning.", "Replacing natural ecosystems with urban infrastructure."],
+                ans: 1
+            },
+            {
+                t: "Community Mapping",
+                d: "Using participatory maps to identify cultural resources.",
+                q: "What is the primary benefit of participatory community mapping?",
+                opts: ["It allows governments to tax cultural resources.", "It empowers local communities to define their own heritage.", "It replaces the need for ethnographic research.", "It hides cultural sites from tourists."],
+                ans: 1
+            },
+            {
+                t: "The COM-B Model",
+                d: "A behavioral science framework for understanding change.",
+                q: "In the COM-B model, what must be present for a behavior to occur?",
+                opts: ["Capability, Opportunity, and Motivation", "Capital, Organization, and Management", "Culture, Origin, and Meaning", "Communication, Observation, and Measurement"],
+                ans: 0
+            },
+            {
+                t: "Intangible Cultural Heritage (ICH)",
+                d: "Understanding the UNESCO 2003 Convention.",
+                q: "Which of the following is considered Intangible Cultural Heritage?",
+                opts: ["A historical stone temple.", "A collection of ancient gold coins.", "Traditional weaving skills passed down through generations.", "A natural national park."],
+                ans: 2
+            },
+            {
+                t: "The Barnum Effect",
+                d: "A psychological phenomenon affecting how people perceive information.",
+                q: "How does the Barnum Effect relate to cultural communication?",
+                opts: ["It explains why people prefer physical artifacts over stories.", "It makes general cultural statements feel highly personalized and true to an individual.", "It describes the financial cost of safeguarding.", "It is a technique for preserving old manuscripts."],
+                ans: 1
+            },
+            {
+                t: "Safeguarding vs. Protection",
+                d: "Understanding the nuanced terminology in heritage management.",
+                q: "In the context of ICH, what does 'safeguarding' emphasize compared to 'protection'?",
+                opts: ["Locking artifacts in a museum vault.", "The continuous recreation and transmission of heritage by communities.", "Preventing any changes to traditional practices.", "Copyrighting cultural expressions for profit."],
+                ans: 1
+            },
+            {
+                t: "Canary Trap",
+                d: "An information security tactic.",
+                q: "How is a 'Canary Trap' used in strategic communications?",
+                opts: ["To capture birds for traditional ceremonies.", "To share different versions of a document to identify who is leaking information.", "To archive oral histories.", "To fundraise for museum maintenance."],
+                ans: 1
+            },
+            {
+                t: "Living Human Treasures",
+                d: "Recognizing the bearers of cultural knowledge.",
+                q: "What is the primary role of a 'Living Human Treasure'?",
+                opts: ["To sell cultural artifacts.", "To ensure the continuous transmission of their specialized knowledge to younger generations.", "To serve as political diplomats.", "To manage museum collections."],
+                ans: 1
+            },
+            {
+                t: "Loss Aversion",
+                d: "A cognitive bias where the pain of losing is psychologically twice as powerful as the pleasure of gaining.",
+                q: "How can 'Loss Aversion' be utilized in a heritage safeguarding campaign?",
+                opts: ["By highlighting the financial gains of tourism.", "By emphasizing that a unique language will be gone forever if not spoken today.", "By offering monetary rewards for practicing traditions.", "By building more physical museums."],
+                ans: 1
+            },
+            {
+                t: "Cultural Appropriation",
+                d: "Understanding the ethical boundaries of sharing heritage.",
+                q: "What distinguishes cultural appropriation from cultural exchange?",
+                opts: ["Learning a language from a native speaker.", "A dominant group exploiting the culture of a marginalized group without respect or compensation.", "Collaborating on a joint musical performance.", "Translating traditional poetry into other languages."],
+                ans: 1
+            },
+            {
+                t: "Nudge Theory",
+                d: "Using subtle interventions to influence behavior.",
+                q: "Which is an example of a 'Nudge' in promoting traditional food?",
+                opts: ["Banning the sale of fast food.", "Placing traditional snacks at eye-level near the checkout counter.", "Taxing imported ingredients.", "Forcing people to attend cooking classes."],
+                ans: 1
+            },
+            {
+                t: "Disaster Risk Reduction (DRR)",
+                d: "Preparing heritage for crises.",
+                q: "Why is DRR crucial for Intangible Cultural Heritage?",
+                opts: ["Because natural disasters only affect physical buildings.", "Because displacement and trauma can severely disrupt the community networks that sustain ICH.", "Because DRR guarantees international funding.", "Because it stops climate change."],
+                ans: 1
+            },
+            {
+                t: "Channel Convergence",
+                d: "A communication strategy.",
+                q: "What does 'Channel Convergence' entail?",
+                opts: ["Digging new irrigation canals for traditional farming.", "Directing all public communication and inquiries to a single, controlled platform.", "Translating texts into multiple languages.", "Merging different cultural dances into one."],
+                ans: 1
+            },
+            {
+                t: "Free, Prior and Informed Consent (FPIC)",
+                d: "An ethical standard in community research.",
+                q: "Why is FPIC essential before documenting a community's sacred rituals?",
+                opts: ["It ensures the researchers get paid.", "It respects the community's right to control their own cultural data and participation.", "It speeds up the publication process.", "It guarantees the research will be scientifically accurate."],
+                ans: 1
+            },
+            {
+                t: "Gini Ratio & Infrastructure",
+                d: "Analyzing the socio-economic impacts of development.",
+                q: "A study found that new rural infrastructure inadvertently increased the Gini ratio. What does this imply?",
+                opts: ["Poverty was completely eradicated.", "The economic inequality within the population widened.", "Traditional arts became more popular.", "The infrastructure was physically unstable."],
+                ans: 1
+            },
+            {
+                t: "Serverless Architecture",
+                d: "Using accessible cloud tools for digital sustainability.",
+                q: "Why might a 'Serverless' approach (like Google Apps Script) be better for a low-resource NGO's cultural database?",
+                opts: ["It requires buying expensive physical servers.", "It is highly sustainable, requiring minimal technical maintenance and ongoing server costs.", "It prevents any data from being shared online.", "It automatically translates cultural data."],
+                ans: 1
+            },
+            {
+                t: "Community-Based Inventory (CBI)",
+                d: "Empowering communities to document their own heritage systematically.",
+                q: "What is the core principle of a Community-Based Inventory in ICH safeguarding?",
+                opts: ["External experts strictly dictate what is valuable.", "The community actively identifies, categorizes, and owns their cultural data.", "It is designed only for physical monuments and artifacts.", "It is a secret database for government use only."],
+                ans: 1
+            },
+            {
+                t: "Psychological Priming",
+                d: "A communication tactic to subtly guide how future information is perceived.",
+                q: "In cultural diplomacy, how can 'Priming' be effectively used?",
+                opts: ["By hiding the true financial cost of a project.", "By subtly introducing related concepts early on to shape how a later policy is received.", "By forcing stakeholders to memorize historical dates.", "By publicly arguing with foreign diplomats."],
+                ans: 1
+            },
+            {
+                t: "High-Context Communication",
+                d: "Understanding how information is implicitly shared in traditional communities.",
+                q: "What characterizes a 'High-Context' cultural communication style?",
+                opts: ["Everything must be written down in long, detailed text documents.", "Communication is done entirely through digital messaging apps.", "Meaning is heavily derived from non-verbal cues, shared history, and relationships.", "People typically speak very loudly to convey meaning."],
+                ans: 2
+            },
+            {
+                t: "The Paradox of Safety",
+                d: "Exploring the risks of over-regulating living cultural systems.",
+                q: "How might the 'Paradox of Safety' negatively impact Intangible Cultural Heritage?",
+                opts: ["By making museum buildings completely earthquake-proof.", "Over-protecting and strictly formalizing a living tradition might stop it from evolving and surviving naturally.", "By adding too many security guards to an exhibition.", "By guaranteeing international funding for local artists."],
+                ans: 1
+            },
+            {
+                t: "Divergent Learning",
+                d: "Understanding 'output-heavy' approaches to transmitting traditional skills.",
+                q: "In traditional craftsmanship, an 'output-heavy' divergent learning style emphasizes:",
+                opts: ["Reading thick theoretical textbooks for years before practicing.", "Learning through continuous hands-on practice, iteration, and creating tangible results.", "Taking multiple-choice written exams.", "Watching instructional videos without touching the tools."],
+                ans: 1
+            },
+            {
+                t: "Serverless Architecture",
+                d: "Building sustainable digital tech for cultural NGOs.",
+                q: "Why is a 'Google Fullstack' approach (Sheets, Apps Script) often ideal for local cultural organizations?",
+                opts: ["It is the most expensive and premium option available.", "It provides a serverless, low-maintenance, and highly sustainable digital infrastructure.", "It requires a dedicated team of professional programmers to run.", "It is only compatible with retro computing hardware."],
+                ans: 1
+            },
+            {
+                t: "Monitoring Data Anomalies",
+                d: "Using data tracking to prevent systemic failures in cultural programs.",
+                q: "When monitoring a cultural grant dashboard, detecting an early data anomaly is crucial because:",
+                opts: ["It allows you to completely ignore the problem.", "It helps spend more budget unnecessarily.", "It prevents minor logistical errors from cascading into critical program failures.", "It proves that qualitative data is useless."],
+                ans: 2
+            },
+            {
+                t: "Minimalist Exhibition Design",
+                d: "Designing spaces that highlight the heritage, not the architecture.",
+                q: "What is an advantage of using an 'industrial minimalist' design for a cultural exhibition?",
+                opts: ["It distracts the visitors with too many complex colors.", "Its raw, low-maintenance aesthetic keeps the focus entirely on the cultural artifacts.", "It requires constant daily repainting and repairs.", "It forces the use of fragile, expensive materials."],
+                ans: 1
+            },
+            {
+                t: "Narrative Convergence",
+                d: "Taking control of narratives during a cultural crisis or dispute.",
+                q: "If a dispute arises over the origin of a shared heritage, what is a strategic first response?",
+                opts: ["Execute a 'Channel Convergence' strategy to consolidate official messaging and clarify facts.", "Deactivate all communication channels and hide.", "Immediately rewrite the history books.", "Ban the heritage practice until the dispute is resolved."],
+                ans: 0
+            },
+            {
+                t: "Organizational Effectiveness",
+                d: "Evaluating the structures that manage cultural policies.",
+                q: "Why is evaluating organizational effectiveness crucial within a Ministry of Culture?",
+                opts: ["To justify reducing the budget for local artists.", "To ensure that bureaucratic structures are genuinely facilitating, rather than hindering, cultural safeguarding.", "To increase the amount of mandatory paperwork.", "To easily confiscate and hide local research data."],
+                ans: 1
+            },
+            {
+                t: "Cold Chain Management",
+                d: "Ensuring temperature-sensitive resources are preserved during logistics.",
+                q: "In the context of vaccine or sensitive biological resource logistics, what is a 'Cold Chain breach'?",
+                opts: ["A sudden increase in shipping costs.", "An exposure to temperatures outside the recommended range, potentially damaging the item.", "A failure in the digital tracking software.", "A physical break in the storage container."],
+                ans: 1
+            },
+            {
+                t: "Batik: Tulis vs Cap",
+                d: "Distinguishing between manual and semi-automated textile arts.",
+                q: "What is the primary characteristic of 'Batik Tulis' that differentiates it from 'Batik Cap'?",
+                opts: ["It uses synthetic dyes only.", "The patterns are applied manually using a 'canting', leading to unique variations in every stroke.", "It is produced significantly faster.", "It does not use wax in the resisting process."],
+                ans: 1
+            },
+            {
+                t: "Social Intervention Design",
+                d: "Creating programs that genuinely change community outcomes.",
+                q: "When designing a social intervention, why is it dangerous to ignore qualitative local data?",
+                opts: ["Because qualitative data is too expensive to collect.", "Because infrastructure alone cannot solve systemic issues if it conflicts with local social dynamics.", "Because only quantitative data is accepted by international donors.", "Because it makes the final report look too long."],
+                ans: 1
+            },
+            {
+                t: "The 'SMILE' Application",
+                d: "Using digital tools for real-time monitoring of critical supplies.",
+                q: "How does real-time data monitoring (like the SMILE app) prevent systemic errors in logistics?",
+                opts: ["By automatically placing orders based on social media trends.", "By identifying dosing or storage anomalies immediately before they reach the end-user.", "By replacing the need for human managers entirely.", "By increasing the battery life of storage units."],
+                ans: 1
+            },
+            {
+                t: "Intangible vs Tangible Link",
+                d: "Understanding how physical sites and living traditions coexist.",
+                q: "Why is the preservation of a physical site (like a Rice Barn) essential for Intangible Heritage?",
+                opts: ["Because physical sites are more valuable for real estate.", "Because the physical space often serves as the 'vessel' where the community practices and transmits their living traditions.", "Because UNESCO only cares about physical buildings.", "Because it is easier to tax physical property."],
+                ans: 1
+            },
+            {
+                t: "Bureaucratic Inertia",
+                d: "Understanding why digital transformation often fails in government.",
+                q: "What is a major cause of failure in 'E-Persuratan' or digital governance systems?",
+                opts: ["The software is always too slow.", "The lack of behavioral adaptation and willingness to shift from paper-based power structures.", "The high cost of server maintenance.", "The lack of high-speed internet in all offices."],
+                ans: 1
+            },
+            {
+                t: "Community Bearing",
+                d: "The role of the individual in the collective heritage.",
+                q: "Who is a 'Community Bearer' in the context of safeguarding?",
+                opts: ["A government official who signs cultural laws.", "An individual or group within the community who practices and transmits the heritage.", "A tourist who visits a cultural site.", "A researcher who writes books about the culture."],
+                ans: 1
+            },
+            {
+                t: "Information Warfare: Canary Trap",
+                d: "Identifying the source of information leaks in an organization.",
+                q: "What is the intended result of a successful 'Canary Trap'?",
+                opts: ["To feed the birds at a heritage site.", "To pinpoint exactly which individual is leaking confidential information by giving them a uniquely 'salted' version of a document.", "To encrypt all digital files.", "To automate public relations messaging."],
+                ans: 1
+            },
+            {
+                t: "Participatory Observation",
+                d: "A core method in ethnographic cultural research.",
+                q: "What does 'Participatory Observation' require from a researcher?",
+                opts: ["Watching the community through satellite imagery.", "Genuinely living within and engaging with the community while simultaneously documenting their practices.", "Conducting interviews only via digital surveys.", "Reading historical archives without visiting the site."],
+                ans: 1
+            },
+            {
+                t: "Sustainable Safeguarding",
+                d: "Ensuring traditions survive long after the funding ends.",
+                q: "What makes a safeguarding project 'Sustainable'?",
+                opts: ["When it relies on permanent international government grants.", "When the community takes full ownership of the practice and integrates it into their daily socio-economic life.", "When the practice is moved entirely to a digital museum.", "When the practice is strictly controlled by a single master."],
+                ans: 1
+            }
+        ];
 
         const app = {
             players: [],
@@ -573,15 +910,83 @@
             },
 
             doRent: (c, oid) => { 
-                const p=app.players[game.currentIdx]; p.ctp-=c; 
-                // SKILL: Master dapat poin ganda saat ada yang belajar dari dia
-                let received = (oid !== -1 && app.players[oid].role === "Master") ? c * 2 : c;
-                if(oid!==-1) app.players[oid].ctp+=received; 
+                game.currentExchangeCost = c;
+                game.currentExchangeOwner = oid;
+
+                // Tarik kuis acak dari database
+                const knowledge = KNOWLEDGE_DB[Math.floor(Math.random() * KNOWLEDGE_DB.length)];
+                game.currentKnowledge = knowledge; // Simpan untuk dicek nanti
+
+                // Update teks informasi
+                document.getElementById('exchange-title').innerText = knowledge.t;
+                document.getElementById('exchange-desc').innerText = knowledge.d;
+                document.getElementById('exchange-cost').innerText = `-${c} CTP`;
                 
-                game.log(`Knowledge Exchange: ${c} CTP.`); 
-                game.updateHUD(); game.nextTurn(); 
+                // Render teks pertanyaan dan tombol pilihan ganda
+                document.getElementById('exchange-q').innerText = knowledge.q;
+                const optsContainer = document.getElementById('exchange-opts');
+                optsContainer.innerHTML = ''; 
+                knowledge.opts.forEach((opt, idx) => {
+                    // Render tombol untuk setiap opsi jawaban
+                    optsContainer.innerHTML += `<button class="btn" style="text-align:left; text-transform:none; padding:12px; font-size:0.95rem; background:#2c3e50; border:none; border-bottom:2px solid #111; color:#fff;" onclick="game.answerQuiz(${idx})">${opt}</button>`;
+                });
+
+                // Reset state UI ke awal (sembunyikan hasil sebelumnya)
+                document.getElementById('exchange-result').classList.add('hidden');
+                document.getElementById('btn-exchange-continue').classList.add('hidden');
+                optsContainer.style.display = 'flex';
+
+                // Tampilkan UI
+                document.getElementById('hud-action').classList.add('hidden');
+                document.getElementById('modal-exchange').classList.remove('hidden');
             },
-            
+
+            answerQuiz: (selectedIndex) => {
+                const k = game.currentKnowledge;
+                const isCorrect = (selectedIndex === k.ans);
+                const p = app.players[game.currentIdx];
+                const oid = game.currentExchangeOwner;
+                
+                let finalCost = game.currentExchangeCost;
+                let resultDiv = document.getElementById('exchange-result');
+
+                // Sembunyikan tombol pilihan ganda agar tidak bisa diklik dua kali
+                document.getElementById('exchange-opts').style.display = 'none';
+
+                // Logika Evaluasi
+                if (isCorrect) {
+                    finalCost = Math.floor(finalCost / 2); // Diskon 50%
+                    resultDiv.innerHTML = `✓ BRILLIANT! Correct answer. Cost reduced to ${finalCost} CTP.`;
+                    resultDiv.style.background = "rgba(46, 213, 115, 0.2)";
+                    resultDiv.style.color = "#2ed573";
+                    game.log(`${p.name} answered correctly! Paid only ${finalCost} CTP.`);
+                } else {
+                    resultDiv.innerHTML = `✗ INCORRECT. The correct answer was: <i>"${k.opts[k.ans]}"</i>. You paid the full ${finalCost} CTP.`;
+                    resultDiv.style.background = "rgba(231, 76, 60, 0.2)";
+                    resultDiv.style.color = "#e74c3c";
+                    game.log(`${p.name} failed the quiz. Paid ${finalCost} CTP.`);
+                }
+
+                // Potong CTP pemain
+                p.ctp -= finalCost; 
+                
+                // Pemasukan buat pemilik tile (Master dapat double)
+                let received = (oid !== -1 && app.players[oid].role === "Master") ? finalCost * 2 : finalCost;
+                if (oid !== -1) app.players[oid].ctp += received; 
+
+                // Munculkan hasil dan tombol lanjut
+                resultDiv.classList.remove('hidden');
+                document.getElementById('btn-exchange-continue').classList.remove('hidden');
+                game.updateHUD();
+            },
+
+            closeExchange: () => {
+                // Tutup panel kuis dan ganti giliran
+                document.getElementById('modal-exchange').classList.add('hidden');
+                game.nextTurn();
+            },
+
+                        
             card: (type) => {
                 const c = CARDS[type][Math.floor(Math.random()*CARDS[type].length)];
                 const m = document.getElementById('modal-overlay'); m.classList.remove('hidden');

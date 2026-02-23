@@ -125,6 +125,15 @@
     </div>
 
     <div id="ui-layer" class="hidden">
+        <audio id="bgm-player" loop>
+        <source src="bgmusic.mp3" type="audio/mpeg">
+    </audio>
+
+    
+    <div id="hud-audio" class="hud-panel" style="top: 20px; left: 380px; width: 180px; border-top: 4px solid var(--gold); display: flex; flex-direction: column; gap: 10px;">    <div style="font-size:0.75rem; color:#aaa;">BGM CONTROLS</div>
+        <button id="btn-bgm" class="btn" onclick="app.toggleBGM()" style="padding: 8px; font-size: 0.8rem;">▶️ PLAY MUSIC</button>
+        <input type="range" id="bgm-vol" min="0" max="1" step="0.1" value="0.5" oninput="app.setVolume(this.value)" style="width: 100%; cursor: pointer; accent-color: var(--gold);">
+    </div>
         <div id="hud-player" class="hud-panel">
             <div style="font-size:1.2rem; font-weight:bold; color:#fff;" id="disp-pname">Player 1</div>
             <div style="font-size:0.75rem; color:#aaa;">ROLE</div>
@@ -203,6 +212,25 @@
 
         const app = {
             players: [],
+
+            // --- AUDIO FUNCTIONS ---
+            toggleBGM: () => {
+                const audio = document.getElementById("bgm-player");
+                const btn = document.getElementById("btn-bgm");
+                if (audio.paused) {
+                    audio.play();
+                    btn.innerHTML = "⏸️ PAUSE MUSIC";
+                    btn.classList.add("btn-blue"); // Ganti warna jadi biru saat play
+                } else {
+                    audio.pause();
+                    btn.innerHTML = "▶️ PLAY MUSIC";
+                    btn.classList.remove("btn-blue"); // Kembali ke warna gold saat pause
+                }
+            },
+            setVolume: (val) => {
+                document.getElementById("bgm-player").volume = val;
+            },
+
             goToSetup: () => {
                 document.getElementById('screen-title').classList.add('hidden');
                 document.getElementById('screen-setup').classList.remove('hidden');

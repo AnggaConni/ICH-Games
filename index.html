@@ -108,10 +108,10 @@
         <h1 class="mega-title">HERITAGE<br>COMMONS</h1>
         <div style="font-size: 1.5rem; color: #aaa; margin-top: 10px; letter-spacing: 3px; text-transform:uppercase;">Safeguarding in a Shared World</div>
         <button class="btn" style="margin-top: 50px; font-size: 1.2rem;" onclick="app.goToSetup()">START DIPLOMACY</button>
-        <div style="margin-top:50px; color:#666; font-size:0.9rem;">
+        <div style="margin-top:50px; color:#666; font-size:0.9rem; text-align: center;">
         DESIGN & CODE BY <strong>ANGGA CONNI SAPUTRA 2024</strong><br>
         Music by <strong>framelens_id</strong>
-</div>
+        </div>
     </div>
 
     <div id="screen-setup" class="hidden flex">
@@ -547,8 +547,489 @@
                 q: "What makes a safeguarding project 'Sustainable'?",
                 opts: ["When it relies on permanent international government grants.", "When the community takes full ownership of the practice and integrates it into their daily socio-economic life.", "When the practice is moved entirely to a digital museum.", "When the practice is strictly controlled by a single master."],
                 ans: 1
+            },
+            { 
+                t: "File Format Sustainability", 
+                d: "Ensuring digital cultural archives remain accessible over time.",
+                q: "Why is choosing open-source file formats (like .TIFF or .WAV) crucial for long-term digital preservation of ICH recordings?",
+                opts: [
+                    "They take up less storage space on hard drives.",
+                    "They can be read by proprietary software only.",
+                    "They prevent vendor lock-in and ensure future accessibility regardless of software changes.",
+                    "They automatically translate oral traditions into multiple languages."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Community Consent Protocol", 
+                d: "Ethical guidelines for researchers documenting ICH.",
+                q: "According to UNESCO's Ethical Principles, if a community withdraws its consent during a documentation project, the researcher must:",
+                opts: [
+                    "Continue documenting anyway for the sake of science.",
+                    "Appeal directly to the government to override the community's decision.",
+                    "Halt all activities immediately and respect the community's decision.",
+                    "Offer monetary compensation to change their minds."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Heritage and Climate Change", 
+                d: "Intersection of environment and safeguarding.",
+                q: "How does climate change specifically threaten Intangible Cultural Heritage in coastal communities?",
+                opts: [
+                    "It increases funding for cultural preservation.",
+                    "Sea-level rise can displace communities, severing the geographic connection to traditions like fishing rituals and boat-building.",
+                    "It makes traditional clothing more fashionable.",
+                    "It reduces the need for disaster preparedness planning."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Evaluation Criteria for Nominations", 
+                d: "How UNESCO assesses ICH nominations.",
+                q: "Which of the following is NOT one of the five main evaluation criteria for inscriptions on the Representative List?",
+                opts: [
+                    "R.1: The element constitutes ICH as defined in Article 2 of the Convention.",
+                    "R.2: Inscription contributes to ensuring visibility and awareness of ICH.",
+                    "R.3: Safeguarding measures are elaborated to protect the element.",
+                    "R.4: The element has high commercial tourism potential."
+                ],
+                ans: 3
+            },
+            { 
+                t: "Tokenism in Participation", 
+                d: "Avoiding superficial community engagement.",
+                q: "What is 'tokenism' in the context of community participation in ICH safeguarding projects?",
+                opts: [
+                    "Giving community members actual decision-making power.",
+                    "Involving community representatives symbolically without giving them real influence over outcomes.",
+                    "Paying community members fair wages for their participation.",
+                    "Documenting community traditions with their full consent."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Intergenerational Transmission", 
+                d: "Core concept in ICH viability.",
+                q: "According to the 2003 Convention, what is the single most important factor in determining whether an ICH element is 'viable'?",
+                opts: [
+                    "The number of YouTube videos about it.",
+                    "Its inclusion in school textbooks.",
+                    "Its continuous transmission from generation to generation within the community.",
+                    "The amount of government funding it receives."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Multinational Nominations", 
+                d: "Shared heritage across borders.",
+                q: "What is a primary advantage of submitting a multinational nomination for an ICH element shared by several countries?",
+                opts: [
+                    "It guarantees faster approval by UNESCO.",
+                    "Each country can submit separate documentation without coordination.",
+                    "It promotes dialogue and cooperation while demonstrating the element's role in building bridges between communities.",
+                    "It allows each country to claim exclusive ownership."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Herarchy of ICH", 
+                d: "Understanding value judgments in heritage.",
+                q: "The Ethical Principles for ICH Safeguarding explicitly reject which problematic approach?",
+                opts: [
+                    "Documenting ICH with community consent.",
+                    "Establishing hierarchies or rankings of ICH elements (e.g., 'this dance is more important than that ritual').",
+                    "Involving youth in transmission activities.",
+                    "Seeking international cooperation for safeguarding."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Digitization Risks", 
+                d: "Potential negative impacts of digital archiving.",
+                q: "What is a significant risk of digitizing sacred or secret ICH without proper protocols?",
+                opts: [
+                    "The files might be accidentally deleted.",
+                    "Sacred knowledge intended only for initiated community members could become publicly accessible, violating cultural protocols.",
+                    "Digital files are always lower quality than analog recordings.",
+                    "It increases the cost of storage significantly."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Periodic Reporting Cycle", 
+                d: "Monitoring mechanism of the Convention.",
+                q: "How often are States Parties generally required to submit their periodic reports on ICH safeguarding efforts to UNESCO?",
+                opts: [
+                    "Every year.",
+                    "Every six years (aligned with the reporting cycle).",
+                    "Only once, upon ratifying the Convention.",
+                    "Whenever a new element is nominated."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Heritage Commodification", 
+                d: "Economic pressures on living traditions.",
+                q: "What is 'commodification' of ICH and why is it concerning?",
+                opts: [
+                    "Making ICH freely available to everyone.",
+                    "The process of transforming cultural practices into marketable products, often stripping them of their deeper meaning to appeal to tourists.",
+                    "Government subsidies for traditional crafts.",
+                    "Fair trade certification for indigenous art."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Community-based Research", 
+                d: "Methodological approaches in ICH documentation.",
+                q: "In community-based research methodology, who should ultimately control and own the research data collected about a community's ICH?",
+                opts: [
+                    "The university or research institution funding the project.",
+                    "The government ministry that issued the research permit.",
+                    "The community itself, following principles of data sovereignty.",
+                    "UNESCO, as the international authority."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Formal vs Non-formal Transmission", 
+                d: "Different educational contexts for ICH.",
+                q: "Non-formal transmission of ICH refers to:",
+                opts: [
+                    "Teaching ICH in university degree programs.",
+                    "Learning that occurs outside official educational institutions, such as within families, apprenticeships, or community gatherings.",
+                    "Online courses about traditional crafts.",
+                    "Government-mandated cultural training programs."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Heritage Impact Assessment", 
+                d: "Evaluating development impacts on ICH.",
+                q: "What should a Heritage Impact Assessment for a development project (e.g., dam construction) specifically evaluate regarding ICH?",
+                opts: [
+                    "Whether the project will increase tourism revenue.",
+                    "How many new jobs will be created for local youth.",
+                    "The potential disruption to community practices, rituals, and knowledge transmission tied to the affected landscape.",
+                    "The architectural style of the new construction."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Transparency in Governance", 
+                d: "Ethical management of ICH programs.",
+                q: "The Operational Directives emphasize that safeguarding measures must be developed and implemented with maximum transparency. This means:",
+                opts: [
+                    "All meetings must be broadcast live on television.",
+                    "Decisions, processes, and outcomes should be openly accessible and clearly communicated to communities and the public.",
+                    "Only government officials can access safeguarding documents.",
+                    "Communities must sign non-disclosure agreements."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Cultural Mapping", 
+                d: "Visualizing community heritage resources.",
+                q: "How does cultural mapping differ from simple geographic mapping?",
+                opts: [
+                    "It only focuses on physical landmarks.",
+                    "It layers intangible elements like stories, rituals, and memories onto physical spaces, showing how communities imbue landscapes with meaning.",
+                    "It uses satellite imagery exclusively.",
+                    "It is conducted without community input."
+                ],
+                ans: 1
+            },
+            { 
+                t: "ICH and Human Dignity", 
+                d: "Ethical foundations of safeguarding.",
+                q: "According to the Ethical Principles, all safeguarding activities must:",
+                opts: [
+                    "Prioritize scientific documentation above all else.",
+                    "Be conducted in the language of the researchers.",
+                    "Respect the dignity and human rights of the communities concerned.",
+                    "Seek maximum media exposure."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Transmission Crisis Indicators", 
+                d: "Early warning signs for endangered ICH.",
+                q: "Which of the following is a warning sign that an ICH element may be facing a transmission crisis?",
+                opts: [
+                    "Increasing number of public performances.",
+                    "Growing tourism interest in the practice.",
+                    "Fewer young people learning the practice, with the average age of practitioners rising significantly.",
+                    "New variations of the tradition emerging."
+                ],
+                ans: 2
+            },
+            { 
+                t: "Glossary of ICH Terms", 
+                d: "Understanding UNESCO terminology.",
+                q: "In UNESCO documents, what is meant by the 'viability' of an ICH element?",
+                opts: [
+                    "Its ability to generate income.",
+                    "Its capacity to survive and be recreated across generations despite changing circumstances.",
+                    "Its physical durability if made into an object.",
+                    "Its popularity on international social media."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Post-Inscription Responsibilities", 
+                d: "Obligations after UNESCO listing.",
+                q: "After an ICH element is inscribed on a UNESCO list, the State Party is expected to:",
+                opts: [
+                    "Consider the work complete and move on to other priorities.",
+                    "Implement the safeguarding measures described in the nomination file and report on their progress in periodic reports.",
+                    "Prevent any changes or evolution in the practice.",
+                    "Charge royalties to anyone who performs the element."
+                ],
+                ans: 1
+            },
+            { 
+                t: "Periodic Reporting Cycle", 
+                d: "Understanding the reporting obligations of States Parties.",
+                q: "According to Chapter V of the Operational Directives, how often must States Parties submit their periodic reports on the implementation of the Convention?",
+                opts: [
+                    "Every two years",
+                    "Every six years, based on a rotation region by region",
+                    "Every ten years",
+                    "Only once, upon ratification"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Urgent Safeguarding List Reporting", 
+                d: "Specific reporting requirements for endangered ICH.",
+                q: "For elements inscribed on the List of Intangible Cultural Heritage in Need of Urgent Safeguarding, how frequently must States Parties submit status reports?",
+                opts: [
+                    "Every two years",
+                    "Every fourth year following inscription",
+                    "Every year for the first five years",
+                    "Only if the element's viability declines"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Form ICH-10", 
+                d: "Official reporting instrument for the Convention.",
+                q: "What is the purpose of Form ICH-10 in the reporting mechanism of the 2003 Convention?",
+                opts: [
+                    "Nominating new elements for the Representative List",
+                    "Reporting on the implementation of the Convention and status of all elements on the Representative List",
+                    "Applying for International Assistance grants",
+                    "Accrediting non-governmental organizations"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Gender in Reporting", 
+                d: "Cross-cutting priority in ICH safeguarding.",
+                q: "The Operational Directives explicitly require States Parties to pay special attention to which factor when preparing periodic reports on inscribed elements?",
+                opts: [
+                    "The commercial value of the element",
+                    "The role of gender",
+                    "The number of tourists visiting related sites",
+                    "The age of the oldest practitioner"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Register of Good Safeguarding Practices", 
+                d: "Mechanism for sharing successful approaches.",
+                q: "What type of programs, projects, and activities can be selected for inclusion in the Register of Good Safeguarding Practices?",
+                opts: [
+                    "Only those funded by UNESCO",
+                    "Those that best reflect the principles and objectives of the Convention",
+                    "Those that generate the highest tourism revenue",
+                    "Those that have been practiced for at least 500 years"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Form ICH-03", 
+                d: "Official form for submitting safeguarding practices.",
+                q: "Which UNESCO form is used to submit proposals for the Register of Good Safeguarding Practices?",
+                opts: [
+                    "ICH-01",
+                    "ICH-02",
+                    "ICH-03",
+                    "ICH-04"
+                ],
+                ans: 2
+            },
+            { 
+                t: "International Assistance Request Forms", 
+                d: "Applying for financial support from the ICH Fund.",
+                q: "Which form should be used to request international assistance of up to US$ 100,000 from the Intangible Cultural Heritage Fund?",
+                opts: [
+                    "ICH-01-up_to",
+                    "ICH-02-up_to",
+                    "ICH-03-up_to",
+                    "ICH-04-up_to"
+                ],
+                ans: 3
+            },
+            { 
+                t: "Emergency Assistance", 
+                d: "Rapid response mechanisms for ICH in crisis.",
+                q: "Unlike standard nomination deadlines, emergency assistance requests to the ICH Fund can be submitted:",
+                opts: [
+                    "Only during UNESCO General Conference sessions",
+                    "At any time",
+                    "Only in January each year",
+                    "Only after a formal warning from the Committee"
+                ],
+                ans: 1
+            },
+            { 
+                t: "NGO Accreditation", 
+                d: "Role of civil society in Convention implementation.",
+                q: "What is the primary function of NGOs accredited to provide advisory services to the Intergovernmental Committee?",
+                opts: [
+                    "To receive annual funding from UNESCO",
+                    "To act in an advisory capacity and contribute to the evaluation of nominations",
+                    "To manage all ICH elements in their country",
+                    "To approve or reject new inscriptions"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Form ICH-09", 
+                d: "Application for NGO accreditation.",
+                q: "Which form must accredited non-governmental organizations use to submit their accreditation requests to act in an advisory capacity to the Committee?",
+                opts: [
+                    "ICH-07",
+                    "ICH-08",
+                    "ICH-09",
+                    "ICH-10"
+                ],
+                ans: 2
+            },
+            { 
+                t: "NGO Reporting Obligations", 
+                d: "Accountability for accredited organizations.",
+                q: "Accredited NGOs must submit reports on their contribution to the implementation of the Convention using which form?",
+                opts: [
+                    "ICH-07",
+                    "ICH-08",
+                    "ICH-09",
+                    "ICH-10"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Multinational Nominations", 
+                d: "Shared heritage across borders.",
+                q: "What is a key advantage of submitting multinational nomination files for ICH elements present in multiple countries?",
+                opts: [
+                    "They receive priority processing by the Committee",
+                    "They require less documentation than national nominations",
+                    "They promote dialogue and cooperation while demonstrating the element's role in building bridges between communities",
+                    "They automatically qualify for the Urgent Safeguarding List"
+                ],
+                ans: 2
+            },
+            { 
+                t: "Ethical Principle 2", 
+                d: "Rights of communities to continue practices.",
+                q: "The second ethical principle recognizes the need to respect communities' right to:",
+                opts: [
+                    "Receive payment for any documentation of their heritage",
+                    "Continue the practices, representations, expressions, knowledge and skills necessary to ensure the viability of ICH",
+                    "Prevent researchers from studying their culture",
+                    "Claim copyright over all traditional expressions"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Ethical Principle 4", 
+                d: "Consent requirements in ICH work.",
+                q: "Ethical Principle 4 explicitly states that all interactions with communities should be subject to:",
+                opts: [
+                    "Government approval",
+                    "Free, prior, sustained, and informed consent",
+                    "Written contracts with financial terms",
+                    "UNESCO oversight"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Sustained Consent", 
+                d: "Understanding the temporal dimension of consent.",
+                q: "In the FPIC framework, what does 'sustained' consent imply beyond initial agreement?",
+                opts: [
+                    "Consent that lasts forever once given",
+                    "Continuous dialogue with communities for confirmation and feedback after consent has been obtained",
+                    "Consent that must be renewed annually",
+                    "Consent that applies to all future projects automatically"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Ethical Principle 8", 
+                d: "The living nature of ICH.",
+                q: "What does Ethical Principle 8 emphasize about the nature of intangible cultural heritage?",
+                opts: [
+                    "It must be preserved exactly as first documented",
+                    "Its dynamic and living nature should be continuously respected",
+                    "It should be frozen in its most authentic form",
+                    "Evolution indicates loss of cultural value"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Commercial Use of ICH Data", 
+                d: "Ethical concerns in heritage commodification.",
+                q: "According to ethical guidelines, what is a primary concern regarding the commercial use of ICH recordings or data?",
+                opts: [
+                    "It always generates revenue for communities",
+                    "It may occur without permission from or benefit to the communities concerned",
+                    "It is prohibited under the Convention",
+                    "It requires UNESCO authorization"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Ethical Principle 6", 
+                d: "Who determines the value of ICH.",
+                q: "Ethical Principle 6 stresses that the value of ICH should be assessed by:",
+                opts: [
+                    "UNESCO expert evaluators",
+                    "Its own community, not subject to external judgments",
+                    "National government authorities",
+                    "International tourism boards"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Form ICH-07", 
+                d: "Supplementary documentation for nominations.",
+                q: "What is the purpose of Form ICH-07 in the nomination process?",
+                opts: [
+                    "Financial reporting for International Assistance",
+                    "Submitting photo and video documentation to accompany nomination files",
+                    "Accreditation of non-governmental organizations",
+                    "Periodic reporting on inscribed elements"
+                ],
+                ans: 1
+            },
+            { 
+                t: "Transfer Between Lists", 
+                d: "Mechanism for reclassifying ICH elements.",
+                q: "Which forms are used to request transfer of an element from the Urgent Safeguarding List to the Representative List?",
+                opts: [
+                    "ICH-01 USL to RL",
+                    "ICH-02 USL to RL",
+                    "ICH-03 USL to RL",
+                    "ICH-04 USL to RL"
+                ],
+                ans: 1
             }
-        ];
+
+       ];
 
         const app = {
             players: [],
@@ -610,7 +1091,13 @@
                         name: document.getElementById(`p-name-${i}`).value,
                         role: ROLES[parseInt(document.getElementById(`p-role-${i}`).value)],
                         color: COLORS[i],
-                        ctp: 2000, pos: 0, frozen: 0, mesh: null
+                        ctp: 2000, 
+                        pos: 0, 
+                        frozen: 0, 
+                        mesh: null,
+                        // --- TAMBAHAN BARU: Variabel untuk Diplomatic Card ---
+                        wrongAnswers: 0,
+                        badRep: false 
                     });
                 }
                 document.getElementById('screen-setup').classList.add('hidden');
@@ -641,11 +1128,19 @@
                 game.controls = new THREE.OrbitControls(game.camera, game.renderer.domElement);
                 game.controls.enableDamping = true; game.controls.dampingFactor=0.05; game.controls.maxPolarAngle=Math.PI/2.1;
 
-                const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8); game.scene.add(hemi);
-                const dir = new THREE.DirectionalLight(0xffeeb1, 1); dir.position.set(50,100,50); dir.castShadow=true; 
+                // --- PENyesuaian CAHAYA ---
+                // Mencerahkan HemisphereLight agar warna putih lantai lebih keluar
+                const hemi = new THREE.HemisphereLight(0xffffff, 0x888888, 1.2); game.scene.add(hemi);
+                const dir = new THREE.DirectionalLight(0xffffff, 0.8); 
+                dir.position.set(50,100,50); dir.castShadow=true; 
                 dir.shadow.mapSize.width=2048; dir.shadow.mapSize.height=2048; game.scene.add(dir);
 
-                const grid = new THREE.GridHelper(200, 50, 0x333333, 0x111111); game.scene.add(grid);
+                // --- GRID HELPER (Garis kotak-kotak) ---
+                // Mengubah warna grid agar menyerupai garis halus di papan Monopoly
+                const grid = new THREE.GridHelper(200, 50, 0xcccccc, 0xaaaaaa); 
+                grid.position.y = 0.01; // Angkat sedikit gridnya agar tidak tenggelam di lantai
+                game.scene.add(grid);
+
                 const partGeo = new THREE.BufferGeometry();
                 const partCount = 500; const posArr = new Float32Array(partCount*3);
                 for(let i=0; i<partCount*3; i++) posArr[i] = (Math.random()-0.5)*150;
@@ -725,23 +1220,130 @@
                     game.tiles.push({mesh, x, z, data:d});
                     game.interactables.push(mesh);
                 }
-                const plane = new THREE.Mesh(new THREE.PlaneGeometry(60,60), new THREE.MeshStandardMaterial({color:0x050505}));
+                const plane = new THREE.Mesh(new THREE.PlaneGeometry(60,60), new THREE.MeshStandardMaterial({color:0xdcdde1}));
                 plane.rotation.x=-Math.PI/2; plane.position.y=-0.51; game.scene.add(plane);
             },
 
             createDecor: () => {
+                // 1. Muat Tekstur Batik (Layer Bawah)
+                const textureLoader = new THREE.TextureLoader();
+                // Menambahkan crossOrigin untuk menghindari error CORS
+                textureLoader.setCrossOrigin("anonymous");
+                
+                // Menggunakan gambar pola generik dari layanan yang ramah CORS sebagai contoh.
+                // Jika kamu punya gambar batik sendiri, pastikan di-host di server yang mengizinkan CORS (misal: imgur, GitHub Pages, dll).
+                const batikUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/68/Collectie_NMvWereldculturen%2C_RV-847-81%2C_Batikpatroon%2C_%27Parang_sawut%27%2C_voor_1891.jpg?download'; 
+                
+                textureLoader.load(batikUrl, function(texture) {
+                    texture.wrapS = THREE.RepeatWrapping;
+                    texture.wrapT = THREE.RepeatWrapping;
+                    // Mengatur seberapa sering gambar diulang. Angka lebih besar = pola lebih kecil/rapat
+                    texture.repeat.set(2, 2); 
+
+                    const bgMat = new THREE.MeshBasicMaterial({
+                        map: texture, 
+                        transparent: true, 
+                        opacity: 0.25 // Opacity diatur agar subtle
+                    });
+                    
+                    const bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), bgMat);
+                    bgPlane.rotation.x = -Math.PI / 2;
+                    bgPlane.position.y = 0.05;
+                    game.scene.add(bgPlane);
+                });
+
+                // 2. Buat Teks "SHARED HERITAGE" (Layer Atas)
                 const cvs = document.createElement('canvas'); cvs.width=1024; cvs.height=256;
                 const ctx = cvs.getContext('2d');
-                ctx.fillStyle = "#800000"; ctx.fillRect(0,0,1024,256);
+                
+                ctx.fillStyle = "rgba(10, 15, 25, 0.85)"; // Warna gelap (#0b0c15) dengan opasitas 85%
+                ctx.fillRect(0,0,1024,256);
+                
                 ctx.strokeStyle="#f1c40f"; ctx.lineWidth=20; ctx.strokeRect(10,10,1004,236);
+                
+                ctx.shadowColor = "rgba(0,0,0,0.8)";
+                ctx.shadowBlur = 10;
+                ctx.shadowOffsetX = 5;
+                ctx.shadowOffsetY = 5;
+                
                 ctx.fillStyle="#fff"; ctx.font="bold 100px Arial"; ctx.textAlign="center"; ctx.textBaseline="middle";
-                ctx.fillText("Shared Heritage", 512,128);
+                ctx.fillText("SHARED HERITAGE", 512,128);
+                
                 const logo = new THREE.Mesh(new THREE.PlaneGeometry(24,6), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(cvs), transparent:true}));
-                logo.rotation.x=-Math.PI/2; logo.rotation.z=-Math.PI/4; logo.position.y=0.1; game.scene.add(logo);
+                logo.rotation.x=-Math.PI/2; logo.rotation.z=-Math.PI/4; 
+                logo.position.y=0.15;
+                game.scene.add(logo);
 
                 const dGeo = new THREE.BoxGeometry(4,1,6);
                 const d1 = new THREE.Mesh(dGeo, new THREE.MeshLambertMaterial({color:0xe67e22})); d1.position.set(-10,0.5,-10); d1.rotation.y=-Math.PI/4; game.scene.add(d1);
                 const d2 = new THREE.Mesh(dGeo, new THREE.MeshLambertMaterial({color:0x0984e3})); d2.position.set(10,0.5,10); d2.rotation.y=-Math.PI/4; game.scene.add(d2);
+            },
+
+            // FUNGSI BARU 1: Membuat 3D Model "Rumah/Museum"
+            createMarker: (colorHex) => {
+                const group = new THREE.Group();
+                
+                // Base (Tembok Kotak)
+                const baseMat = new THREE.MeshLambertMaterial({ color: colorHex });
+                const base = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.5, 0.6), baseMat);
+                base.position.y = 0.25;
+                base.castShadow = true;
+                group.add(base);
+                
+                // Atap (Kerucut segi empat)
+                const roof = new THREE.Mesh(new THREE.ConeGeometry(0.55, 0.4, 4), baseMat);
+                roof.position.y = 0.7;
+                roof.rotation.y = Math.PI / 4; // Diputar 45 derajat agar pas dengan kotak
+                roof.castShadow = true;
+                group.add(roof);
+                
+                return group;
+            },
+
+            // FUNGSI BARU 2: Menghitung posisi pinggir tile dan meletakkannya
+            placeMarkerOnTile: (tileIdx, colorHex) => {
+                const tile = game.tiles[tileIdx];
+                const marker = game.createMarker(colorHex);
+                
+                // Menghitung apakah sudah ada rumah di tile ini (untuk shared heritage)
+                if(tile.data.markerCount === undefined) tile.data.markerCount = 0;
+                const count = tile.data.markerCount;
+                tile.data.markerCount++;
+
+                let mx = tile.x;
+                let mz = tile.z;
+                
+                const edgeOffset = 1.1; // Seberapa maju ke tengah board (area red circle-mu)
+                const sideOffset = count * 0.8 - 0.4; // Jarak geser ke samping jika ada lebih dari 1 rumah
+
+                // Logika penempatan berdasarkan sisi board
+                if (tileIdx < 15) { // Sisi Bawah
+                    mz -= edgeOffset;
+                    mx -= sideOffset;
+                } else if (tileIdx < 30) { // Sisi Kiri
+                    mx += edgeOffset;
+                    mz += sideOffset;
+                } else if (tileIdx < 45) { // Sisi Atas
+                    mz += edgeOffset;
+                    mx += sideOffset;
+                } else { // Sisi Kanan
+                    mx -= edgeOffset;
+                    mz -= sideOffset;
+                }
+
+                marker.position.set(mx, 0, mz);
+                
+                // Animasi drop dari atas (Juicy feedback!)
+                marker.position.y = 5; 
+                let fall = setInterval(() => {
+                    marker.position.y -= 0.5;
+                    if(marker.position.y <= 0) {
+                        marker.position.y = 0;
+                        clearInterval(fall);
+                    }
+                }, 20);
+
+                game.scene.add(marker);
             },
 
             spawnPlayers: () => {
@@ -850,10 +1452,19 @@
                     if (p.role === "Academic") {
                         game.log(`🎓 ${p.name} (Academic) is tax-exempt!`);
                     } else {
-                        p.ctp-=d.c; game.log(`Paid Tax ${d.c}`); 
+                        // --- EFEK KARTU BAD REPUTATION ---
+                        let taxAmount = d.c;
+                        if (p.badRep) {
+                            taxAmount = taxAmount * 2; // Pajak dikali DUA!
+                            game.log(`🚨 Bad Rep Penalty! Tax DOUBLED!`);
+                        }
+                        
+                        p.ctp -= taxAmount; 
+                        game.log(`Paid Tax: ${taxAmount} CTP`); 
                     }
                     game.updateHUD(); game.nextTurn(); return; 
                 }
+
                 if(d.t==='ich'||d.t==='shared') game.action(p, d);
                 else game.nextTurn();
             },
@@ -889,11 +1500,12 @@
                     p.ctp-=c; const d=game.tiles[p.pos].data; 
                     if(d.t==='shared') d.sharedOwners.push(p.id); else d.owner=p.id; 
                     game.log(`${p.name} safeguards ${d.n}`); 
-                    const m=new THREE.Mesh(new THREE.CylinderGeometry(1.5,1.5,0.1,32), new THREE.MeshBasicMaterial({color:p.color})); 
-                    m.position.copy(game.tiles[p.pos].mesh.position); m.position.y=0.06; game.scene.add(m); 
-                    game.updateHUD(); 
                     
-                    // PEMANGGILAN FUNGSI MENANG (Akan kita buat di Tahap 2)
+                    // --- PERUBAHAN DI SINI (Panggil fungsi pembuat rumah) ---
+                    game.placeMarkerOnTile(p.pos, p.color);
+                    // --------------------------------------------------------
+
+                    game.updateHUD(); 
                     game.checkWinCondition(); 
                 } else alert("No CTP");
             },
@@ -902,9 +1514,13 @@
                 const p=app.players[game.currentIdx]; 
                 if(p.ctp>=c) { 
                     p.ctp-=c; game.tiles[p.pos].data.sharedOwners.push(p.id); 
-                    game.log("Joined stewardship."); game.updateHUD(); 
+                    game.log("Joined stewardship."); 
                     
-                    // PEMANGGILAN FUNGSI MENANG (Akan kita buat di Tahap 2)
+                    // --- PERUBAHAN DI SINI (Panggil fungsi pembuat rumah juga) ---
+                    game.placeMarkerOnTile(p.pos, p.color);
+                    // -------------------------------------------------------------
+
+                    game.updateHUD(); 
                     game.checkWinCondition(); 
                 } else alert("No CTP"); 
             },
@@ -961,7 +1577,21 @@
                     resultDiv.style.color = "#2ed573";
                     game.log(`${p.name} answered correctly! Paid only ${finalCost} CTP.`);
                 } else {
-                    resultDiv.innerHTML = `✗ INCORRECT. The correct answer was: <i>"${k.opts[k.ans]}"</i>. You paid the full ${finalCost} CTP.`;
+                    // --- LOGIKA HUKUMAN JAHAT ---
+                    p.wrongAnswers += 1; // Tambah dosa
+                    let repMsg = "";
+                    
+                    // Kalau salah 3 kali, jatuhkan kartu BAD REPUTATION
+                    if (p.wrongAnswers === 3 && !p.badRep) {
+                        p.badRep = true;
+                        repMsg = `<br><br><span style="color:#f1c40f;">🚨 <b>DIPLOMATIC CRISIS!</b> You answered wrong 3 times. You acquired the <b>BAD REPUTATION</b> card. All future taxes are DOUBLED!</span>`;
+                        game.log(`🚨 ${p.name} acquired a BAD REPUTATION!`);
+                    } else if (p.wrongAnswers < 3) {
+                        // Tampilkan sisa "nyawa" sebelum kena kartu
+                        repMsg = `<br><br><small style="color:#aaa;">Strike ${p.wrongAnswers}/3 before acquiring a Bad Reputation.</small>`;
+                    }
+
+                    resultDiv.innerHTML = `✗ INCORRECT. The correct answer was: <i>"${k.opts[k.ans]}"</i>. You paid the full ${finalCost} CTP. ${repMsg}`;
                     resultDiv.style.background = "rgba(231, 76, 60, 0.2)";
                     resultDiv.style.color = "#e74c3c";
                     game.log(`${p.name} failed the quiz. Paid ${finalCost} CTP.`);
@@ -1073,11 +1703,18 @@
             },
             
             updateHUD: () => { 
-                const p=app.players[game.currentIdx]; 
-                document.getElementById('disp-pname').innerText=p.name; 
-                document.getElementById('hud-player').style.borderLeftColor='#'+p.color.toString(16).padStart(6,'0'); 
-                document.getElementById('disp-prole').innerText=p.role; 
-                document.getElementById('disp-ctp').innerText=p.ctp; 
+                const p = app.players[game.currentIdx]; 
+                document.getElementById('disp-pname').innerText = p.name; 
+                document.getElementById('hud-player').style.borderLeftColor = '#' + p.color.toString(16).padStart(6,'0'); 
+                
+                // --- TAMPILKAN STATUS BAD REPUTATION ---
+                let roleDisplay = p.role;
+                if (p.badRep) {
+                    roleDisplay += ` <br><span style="color:#e74c3c; font-size:0.7rem; font-weight:bold; letter-spacing:1px;">[ 🚨 BAD REPUTATION ]</span>`;
+                }
+                document.getElementById('disp-prole').innerHTML = roleDisplay; 
+                
+                document.getElementById('disp-ctp').innerText = p.ctp; 
             },
             
             log: (msg) => { const b=document.getElementById('hud-log'); b.innerHTML+=`<div class="log-line">${msg}</div>`; b.scrollTop=b.scrollHeight; },
